@@ -32,8 +32,14 @@ void main(){
   
 /* Méthode qui utilise la librairie de Digilent pour la carte MX3 */
  LED_Init();
+ LED_SetValue(0, 1);
+ LED_SetValue(1, 1);
  LED_SetValue(2, 1); //turn on LED2
-  
+ LED_SetValue(3, 1);
+ LED_SetValue(4, 1);
+ LED_SetValue(5, 1);
+ LED_SetValue(6, 1);
+ LED_SetValue(7, 1);
 }
 
 
