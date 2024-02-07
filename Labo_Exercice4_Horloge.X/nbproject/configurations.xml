@@ -4,11 +4,17 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/Test_SWT_LED.X/config.h</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/Test_SWT_LED.X/config_bits.h</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/Test_SWT_LED.X/led.h</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/Test_SWT_LED.X/swt.h</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/Test_SWT_LED.X/btn.h</itemPath>
+      <itemPath>config.h</itemPath>
+      <itemPath>led.h</itemPath>
+      <itemPath>i2c.h</itemPath>
+      <itemPath>acl.h</itemPath>
+      <itemPath>adc.h</itemPath>
+      <itemPath>aic.h</itemPath>
+      <itemPath>spiflash.h</itemPath>
+      <itemPath>lcd.h</itemPath>
+      <itemPath>uart.h</itemPath>
+      <itemPath>btn.h</itemPath>
+      <itemPath>pmods.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -17,10 +23,19 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/Test_SWT_LED.X/led.c</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/Test_SWT_LED.X/main.c</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/Test_SWT_LED.X/swt.c</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/Test_SWT_LED.X/btn.c</itemPath>
+      <itemPath>config_bits.c</itemPath>
+      <itemPath>led.c</itemPath>
+      <itemPath>i2c.c</itemPath>
+      <itemPath>acl.c</itemPath>
+      <itemPath>adc.c</itemPath>
+      <itemPath>aic.c</itemPath>
+      <itemPath>spiflash.c</itemPath>
+      <itemPath>lcd.c</itemPath>
+      <itemPath>uart.c</itemPath>
+      <itemPath>btn.c</itemPath>
+      <itemPath>pmods.c</itemPath>
+      <itemPath>main.c</itemPath>
+      <itemPath>pmod_s.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -28,6 +43,11 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>../../Documents/UdeS/S4/APP3</Elem>
+    <Elem>.</Elem>
+    <Elem>../../../Microcontroleurs et interfaces APP3/Bibliothèque</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="default" type="2">
@@ -38,11 +58,11 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>PK3OBPlatformTool</platformTool>
         <languageToolchain>XC32</languageToolchain>
-        <languageToolchainVersion>2.50</languageToolchainVersion>
+        <languageToolchainVersion>4.21</languageToolchainVersion>
         <platform>4</platform>
       </toolsSet>
       <packs>
-        <pack name="PIC32MX_DFP" vendor="Microchip" version="1.5.259"/>
+        <pack name="PIC32MX_DFP" vendor="Microchip" version="1.3.231"/>
       </packs>
       <ScriptingSettings>
       </ScriptingSettings>
@@ -91,7 +111,6 @@
         <property key="preprocessor-macros" value=""/>
         <property key="strict-ansi" value="false"/>
         <property key="support-ansi" value="false"/>
-        <property key="tentative-definitions" value=""/>
         <property key="toplevel-reordering" value=""/>
         <property key="unaligned-access" value=""/>
         <property key="use-cci" value="false"/>
@@ -123,7 +142,6 @@
       </C32-AS>
       <C32-CO>
         <property key="coverage-enable" value=""/>
-        <property key="stack-guidance" value="false"/>
       </C32-CO>
       <C32-LD>
         <property key="additional-options-use-response-files" value="false"/>
@@ -204,11 +222,36 @@
         <property key="omit-pack-options" value="1"/>
         <property key="relaxed-math" value="false"/>
         <property key="save-temps" value="false"/>
-        <property key="stack-smashing" value=""/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
       <PK3OBPlatformTool>
-        <property key="firmware.download.all" value="false"/>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="ToolFirmwareFilePath"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
+        <property key="memories.bootflash" value="true"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.dataflash" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.ranges"
+                  value="${memories.programmemory.ranges}"/>
+        <property key="memories.userotp" value="true"/>
+        <property key="poweroptions.powerenable" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.preservedataflash" value="false"/>
+        <property key="programoptions.preservedataflash.ranges"
+                  value="${programoptions.preservedataflash.ranges}"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveeeprom.ranges"
+                  value="${programoptions.preserveeeprom.ranges}"/>
+        <property key="programoptions.preserveprogram.ranges" value=""/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.usehighvoltageonmclr" value="false"/>
+        <property key="programoptions.uselvpprogramming" value="false"/>
+        <property key="voltagevalue" value="3.25"/>
       </PK3OBPlatformTool>
     </conf>
   </confs>
