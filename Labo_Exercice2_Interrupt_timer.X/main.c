@@ -29,7 +29,8 @@ void initialize_timer_interrupt(void) {
   T1CONbits.TCKPS = 2;                //    ? prescaler value
   T1CONbits.TGATE = 0;                //    not gated input (the default)
   T1CONbits.TCS = 0;                  //    PCBLK input (the default)
-  PR1 = (int)(((float)(TMR_TIME * PB_FRQ) / 256) + 0.5);   //set period register, generates one interrupt every ? us
+  // PR1 = (int)(((float)(TMR_TIME * PB_FRQ) / 256) + 0.5); 
+  PR1 = 1000;  //set period register, generates one interrupt every ? us
   TMR1 = 0;                           //    initialize count to 0
   IPC1bits.T1IP = 2;                  //    INT step 4: priority
   IPC1bits.T1IS = 0;                  //    subpriority
@@ -49,7 +50,7 @@ void main() {
     while(1) {
         if(Flag_1s) {
             Flag_1s = 0;        // Reset the flag to capture the next event
-            if (++count >= 500) {
+            if (++count >= 1) {
                 count = 0;
                 LED_ToggleValue(0); // Toggle the led at 1 Hz
             }
