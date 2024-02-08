@@ -13,6 +13,7 @@
 #include "config.h"
 #include "config_bits.h"
 #include "lcd.h"
+#include "swt.h"
 #include "led.h"
 #include "pmods.h"
 
@@ -50,6 +51,7 @@ void main() {
 
     initialize_timer_interrupt();
     int count = 0;
+    int compteur = 0;
     PMODS_InitPin(1,1,0,0,0); // initialisation du JB1 (RD9))
     macro_enable_interrupts();
 
@@ -64,9 +66,40 @@ void main() {
             Flag_1m = 0;            // Reset the flag to capture the next event
             if (++count >= 1000)
             {
+                if(compteur == 8){
+                    compteur = 0;
+                }
+                
                 count = 0;
-                LCD_seconde(++seconde);
-            }
+                
+                if(SWT_GetValue(0) == 1)
+                {
+                   ++seconde;
+                } 
+                else
+                {
+                   LCD_seconde(++seconde);
+                }
+                
+                if(SWT_GetValue(1) == 1)
+                {
+                    if(compteur == 0)
+                    {
+                       LED_SetValue(7, 0); 
+                    }
+                    else
+                    {
+                      LED_SetValue(compteur-1, 0); 
+                    }
+                           
+                    LED_SetValue(compteur, 1);
+                }
+                else
+                {
+                  LED_Init();
+                }
+                ++compteur;
+            }  
         }
     }
 }

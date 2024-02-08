@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=lcd.c led.c main.c pmods.c
+SOURCEFILES_QUOTED_IF_SPACED=lcd.c led.c main.c pmods.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/lcd.o ${OBJECTDIR}/led.o ${OBJECTDIR}/main.o ${OBJECTDIR}/pmods.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/lcd.o.d ${OBJECTDIR}/led.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/pmods.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/lcd.o ${OBJECTDIR}/led.o ${OBJECTDIR}/main.o ${OBJECTDIR}/pmods.o ${OBJECTDIR}/_ext/60433075/swt.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/lcd.o.d ${OBJECTDIR}/led.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/pmods.o.d ${OBJECTDIR}/_ext/60433075/swt.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/lcd.o ${OBJECTDIR}/led.o ${OBJECTDIR}/main.o ${OBJECTDIR}/pmods.o
+OBJECTFILES=${OBJECTDIR}/lcd.o ${OBJECTDIR}/led.o ${OBJECTDIR}/main.o ${OBJECTDIR}/pmods.o ${OBJECTDIR}/_ext/60433075/swt.o
 
 # Source Files
-SOURCEFILES=lcd.c led.c main.c pmods.c
+SOURCEFILES=lcd.c led.c main.c pmods.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c
 
 
 
@@ -131,6 +131,12 @@ ${OBJECTDIR}/pmods.o: pmods.c  .generated_files/flags/default/48308f61fff08b440f
 	@${RM} ${OBJECTDIR}/pmods.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/pmods.o.d" -o ${OBJECTDIR}/pmods.o pmods.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
+${OBJECTDIR}/_ext/60433075/swt.o: /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c  .generated_files/flags/default/43cc033873cb6635a150f5b32d7119652918cc17 .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
+	@${MKDIR} "${OBJECTDIR}/_ext/60433075" 
+	@${RM} ${OBJECTDIR}/_ext/60433075/swt.o.d 
+	@${RM} ${OBJECTDIR}/_ext/60433075/swt.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/swt.o.d" -o ${OBJECTDIR}/_ext/60433075/swt.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
+	
 else
 ${OBJECTDIR}/lcd.o: lcd.c  .generated_files/flags/default/f4e0c6779c140b6d378e76491e1d56f4c51db272 .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
 	@${MKDIR} "${OBJECTDIR}" 
@@ -155,6 +161,12 @@ ${OBJECTDIR}/pmods.o: pmods.c  .generated_files/flags/default/519a4e117fdb01d5c5
 	@${RM} ${OBJECTDIR}/pmods.o.d 
 	@${RM} ${OBJECTDIR}/pmods.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/pmods.o.d" -o ${OBJECTDIR}/pmods.o pmods.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
+	
+${OBJECTDIR}/_ext/60433075/swt.o: /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c  .generated_files/flags/default/48ea25635109c06630a9bfd5c52ab5a319fe215a .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
+	@${MKDIR} "${OBJECTDIR}/_ext/60433075" 
+	@${RM} ${OBJECTDIR}/_ext/60433075/swt.o.d 
+	@${RM} ${OBJECTDIR}/_ext/60433075/swt.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/swt.o.d" -o ${OBJECTDIR}/_ext/60433075/swt.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
 endif
 

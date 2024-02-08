@@ -27,6 +27,8 @@
                    projectFiles="false">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
+    <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c</itemPath>
+    <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.h</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>../Labo_Exercice2_Interrupt_timer_SOLUTION.X</Elem>
@@ -43,7 +45,7 @@
         <platformTool>PK3OBPlatformTool</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>2.50</languageToolchainVersion>
-        <platform>3</platform>
+        <platform>4</platform>
       </toolsSet>
       <packs>
         <pack name="PIC32MX_DFP" vendor="Microchip" version="1.5.259"/>
@@ -211,6 +213,9 @@
         <property key="stack-smashing" value=""/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
+      <PK3OBPlatformTool>
+        <property key="firmware.download.all" value="false"/>
+      </PK3OBPlatformTool>
     </conf>
   </confs>
 </configurationDescriptor>
