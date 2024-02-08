@@ -6,6 +6,7 @@
                    projectFiles="true">
       <itemPath>config.h</itemPath>
       <itemPath>led.h</itemPath>
+      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/config_bits.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"

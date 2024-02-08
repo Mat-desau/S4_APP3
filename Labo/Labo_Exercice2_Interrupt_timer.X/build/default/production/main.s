@@ -50,8 +50,8 @@
 	.align	2
 	.globl	Timer1ISR
 .LFB4 = .
-	.file 1 "/Users/francoisdesautels/Documents/GitHub/S4_APP3/Labo_Exercice2_Interrupt_timer.X/main.c"
-	.loc 1 20 0
+	.file 1 "/Users/francoisdesautels/Documents/GitHub/S4_APP3/Labo/Labo_Exercice2_Interrupt_timer.X/main.c"
+	.loc 1 21 0
 	.set	nomips16
 	.set	nomicromips
 	.ent	Timer1ISR
@@ -80,23 +80,36 @@ Timer1ISR:
 	sw	$3,4($sp)	 #,
 	sw	$2,0($sp)	 #,
 .LCFI1 = .
-	.loc 1 21 0
-	li	$2,1			# 0x1	 # tmp226,
-	sw	$2,%gp_rel(Flag_1s)($28)	 # tmp226, Flag_1s
 	.loc 1 23 0
-	lui	$2,%hi(IFS0)	 # tmp227,
-	lw	$3,%lo(IFS0)($2)	 # tmp228,
-	ins	$3,$0,4,1	 # tmp228,,,
-	sw	$3,%lo(IFS0)($2)	 # tmp228,
-	.loc 1 24 0
+	lw	$2,%gp_rel(count)($28)	 # count, count
+	addiu	$2,$2,1	 # count.1, count,
+	slt	$3,$2,500	 # tmp229, count.1,
+	beql	$3,$0,.L2	 #, tmp229,,
+	sw	$0,%gp_rel(count)($28)	 #, count
+
+	j	.L3	 #
+	sw	$2,%gp_rel(count)($28)	 # count.1, count
+
+.L2:
+	.loc 1 25 0
+	li	$2,1			# 0x1	 # tmp230,
+	sw	$2,%gp_rel(Flag_1s)($28)	 # tmp230, Flag_1s
+.L3:
+	.loc 1 28 0
+	lui	$2,%hi(IFS0)	 # tmp231,
+	lw	$3,%lo(IFS0)($2)	 # tmp232,
+	ins	$3,$0,4,1	 # tmp232,,,
+	sw	$3,%lo(IFS0)($2)	 # tmp232,
+	.loc 1 29 0
 	lw	$2,12($sp)	 #,
 	andi	$2,$2,0xf	 #,,
-	bne	$2,$0,.L5
+	bne	$2,$0,.L7
 	nop
 	 #,,,
+.L6:
 	lw	$3,4($sp)	 #,
 	lw	$2,0($sp)	 #,
-.L5:
+.L7:
 	di
 	ehb
 	lw	$26,20($sp)	 #,
@@ -120,7 +133,7 @@ Timer1ISR:
 	.align	2
 	.globl	initialize_timer_interrupt
 .LFB5 = .
-	.loc 1 28 0
+	.loc 1 33 0
 	.set	nomips16
 	.set	nomicromips
 	.ent	initialize_timer_interrupt
@@ -132,48 +145,49 @@ initialize_timer_interrupt:
 	.set	noreorder
 	.set	nomacro
 # End mchp_output_function_prologue
-	.loc 1 29 0
+	.loc 1 34 0
 	lui	$2,%hi(T1CON)	 # tmp226,
 	lhu	$3,%lo(T1CON)($2)	 #,
-	li	$5,2			# 0x2	 # tmp229,
-	ins	$3,$5,4,2	 # tmp228, tmp229,,
+	li	$4,3			# 0x3	 # tmp229,
+	ins	$3,$4,4,2	 # tmp228, tmp229,,
 	sh	$3,%lo(T1CON)($2)	 # tmp228,
-	.loc 1 30 0
+	.loc 1 35 0
 	lhu	$3,%lo(T1CON)($2)	 #,
 	ins	$3,$0,7,1	 # tmp231,,,
 	sh	$3,%lo(T1CON)($2)	 # tmp231,
-	.loc 1 31 0
+	.loc 1 36 0
 	lhu	$3,%lo(T1CON)($2)	 #,
 	ins	$3,$0,1,1	 # tmp233,,,
 	sh	$3,%lo(T1CON)($2)	 # tmp233,
-	.loc 1 33 0
-	li	$4,1000			# 0x3e8	 # tmp235,
+	.loc 1 37 0
+	li	$4,188			# 0xbc	 # tmp235,
 	lui	$3,%hi(PR1)	 # tmp234,
 	sw	$4,%lo(PR1)($3)	 # tmp235, PR1
-	.loc 1 34 0
+	.loc 1 38 0
 	lui	$3,%hi(TMR1)	 # tmp236,
 	sw	$0,%lo(TMR1)($3)	 #, TMR1
-	.loc 1 35 0
+	.loc 1 39 0
 	lui	$3,%hi(IPC1)	 # tmp237,
 	lw	$4,%lo(IPC1)($3)	 # tmp239,
-	ins	$4,$5,2,3	 # tmp239, tmp229,,
+	li	$5,2			# 0x2	 # tmp240,
+	ins	$4,$5,2,3	 # tmp239, tmp240,,
 	sw	$4,%lo(IPC1)($3)	 # tmp239,
-	.loc 1 36 0
+	.loc 1 40 0
 	lw	$4,%lo(IPC1)($3)	 # tmp242,
 	ins	$4,$0,0,2	 # tmp242,,,
 	sw	$4,%lo(IPC1)($3)	 # tmp242,
-	.loc 1 37 0
+	.loc 1 41 0
 	lui	$3,%hi(IFS0)	 # tmp243,
 	lw	$4,%lo(IFS0)($3)	 # tmp244,
 	ins	$4,$0,4,1	 # tmp244,,,
 	sw	$4,%lo(IFS0)($3)	 # tmp244,
-	.loc 1 38 0
+	.loc 1 42 0
 	lui	$3,%hi(IEC0)	 # tmp245,
 	lw	$5,%lo(IEC0)($3)	 # tmp247,
 	li	$4,1			# 0x1	 # tmp248,
 	ins	$5,$4,4,1	 # tmp247, tmp248,,
 	sw	$5,%lo(IEC0)($3)	 # tmp247,
-	.loc 1 39 0
+	.loc 1 43 0
 	lhu	$3,%lo(T1CON)($2)	 #,
 	ins	$3,$4,15,1	 # tmp251, tmp248,,
 	sh	$3,%lo(T1CON)($2)	 # tmp251,
@@ -190,7 +204,7 @@ initialize_timer_interrupt:
 	.align	2
 	.globl	main
 .LFB6 = .
-	.loc 1 42 0
+	.loc 1 46 0
 	.set	nomips16
 	.set	nomicromips
 	.ent	main
@@ -204,16 +218,16 @@ main:
 .LCFI3 = .
 	sw	$31,20($sp)	 #,
 .LCFI4 = .
-	.loc 1 43 0
+	.loc 1 47 0
 	jal	LED_Init	 #
 .LVL0 = .
-	.loc 1 44 0
+	.loc 1 48 0
 	jal	initialize_timer_interrupt	 #
 .LVL1 = .
 .LBB2 = .
-	.loc 1 47 0
+	.loc 1 50 0
  #APP
- # 47 "main.c" 1
+ # 50 "main.c" 1
 	mfc0 $3,$13	 # val
  # 0 "" 2
 .LVL2 = .
@@ -222,7 +236,7 @@ main:
 	or	$2,$3,$2	 # val, val, tmp230
 .LVL3 = .
  #APP
- # 47 "main.c" 1
+ # 50 "main.c" 1
 	mtc0 $2,$13	 # val
  # 0 "" 2
 .LVL4 = .
@@ -233,15 +247,15 @@ main:
 	ins	$3,$4,12,1	 # tmp234, tmp235,,
 	sw	$3,%lo(INTCON)($2)	 # tmp234,
 	ei	$2
-.L9:
+.L11:
 .LBE2 = .
-	.loc 1 51 0
-	lw	$2,%gp_rel(Flag_1s)($28)	 # Flag_1s.0, Flag_1s
-	beq	$2,$0,.L9	 #, Flag_1s.0,,
-	.loc 1 52 0
-	sw	$0,%gp_rel(Flag_1s)($28)	 #, Flag_1s
+	.loc 1 54 0
+	lw	$2,%gp_rel(Flag_1s)($28)	 # Flag_1s.2, Flag_1s
+	beq	$2,$0,.L11	 #, Flag_1s.2,,
 .LBB3 = .
 	.loc 1 55 0
+	sw	$0,%gp_rel(Flag_1s)($28)	 #, Flag_1s
+	.loc 1 56 0
 	.set	noreorder
 	.set	nomacro
 	jal	LED_ToggleValue	 #
@@ -250,14 +264,20 @@ main:
 	.set	reorder
 
 .LVL5 = .
-	j	.L9	 #
+	j	.L11	 #
 .LBE3 = .
 # Begin mchp_output_function_epilogue
 # End mchp_output_function_epilogue
 	.end	main
 .LFE6:
 	.size	main, .-main
+	.globl	count
 	.section	.sbss,bss
+	.align	2
+	.type	count, @object
+	.size	count, 4
+count:
+	.space	4
 	.align	2
 	.type	Flag_1s, @object
 	.size	Flag_1s, 4
@@ -332,7 +352,7 @@ Flag_1s:
 	.file 3 "/Applications/microchip/xc32/v2.50/pic32mx/include/machine/int_types.h"
 	.section	.debug_info,info
 .Ldebug_info0:
-	.4byte	0xbe2
+	.4byte	0xbed
 	.2byte	0x2
 	.4byte	.Ldebug_abbrev0
 	.byte	0x4
@@ -340,8 +360,8 @@ Flag_1s:
 	.ascii	"GNU C 4.8.3 MPLAB XC32 Compiler v2.50\000"
 	.byte	0x1
 	.ascii	"main.c\000"
-	.ascii	"/Users/francoisdesautels/Documents/GitHub/S4_APP3/Labo_E"
-	.ascii	"xercice2_Interrupt_timer.X\000"
+	.ascii	"/Users/francoisdesautels/Documents/GitHub/S4_APP3/Labo/L"
+	.ascii	"abo_Exercice2_Interrupt_timer.X\000"
 	.4byte	.Ltext0
 	.4byte	.Letext0
 	.4byte	.Ldebug_line0
@@ -369,7 +389,7 @@ Flag_1s:
 	.ascii	"__uint32_t\000"
 	.byte	0x3
 	.byte	0x33
-	.4byte	0xf5
+	.4byte	0xfa
 	.uleb128 0x2
 	.byte	0x4
 	.byte	0x7
@@ -386,12 +406,12 @@ Flag_1s:
 	.byte	0x4
 	.byte	0x2
 	.byte	0xd4
-	.4byte	0x1ca
+	.4byte	0x1cf
 	.uleb128 0x5
 	.ascii	"TCS\000"
 	.byte	0x2
 	.byte	0xd6
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1e
@@ -402,7 +422,7 @@ Flag_1s:
 	.ascii	"TSYNC\000"
 	.byte	0x2
 	.byte	0xd7
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1d
@@ -413,7 +433,7 @@ Flag_1s:
 	.ascii	"TCKPS\000"
 	.byte	0x2
 	.byte	0xd9
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x2
 	.byte	0x1a
@@ -424,7 +444,7 @@ Flag_1s:
 	.ascii	"TGATE\000"
 	.byte	0x2
 	.byte	0xdb
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x18
@@ -435,7 +455,7 @@ Flag_1s:
 	.ascii	"TWIP\000"
 	.byte	0x2
 	.byte	0xdd
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x14
@@ -446,7 +466,7 @@ Flag_1s:
 	.ascii	"TWDIS\000"
 	.byte	0x2
 	.byte	0xde
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x13
@@ -457,7 +477,7 @@ Flag_1s:
 	.ascii	"SIDL\000"
 	.byte	0x2
 	.byte	0xdf
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x12
@@ -468,7 +488,7 @@ Flag_1s:
 	.ascii	"ON\000"
 	.byte	0x2
 	.byte	0xe1
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x10
@@ -480,12 +500,12 @@ Flag_1s:
 	.byte	0x4
 	.byte	0x2
 	.byte	0xe3
-	.4byte	0x1fb
+	.4byte	0x200
 	.uleb128 0x5
 	.ascii	"TCKPS0\000"
 	.byte	0x2
 	.byte	0xe5
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1b
@@ -496,7 +516,7 @@ Flag_1s:
 	.ascii	"TCKPS1\000"
 	.byte	0x2
 	.byte	0xe6
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1a
@@ -508,12 +528,12 @@ Flag_1s:
 	.byte	0x4
 	.byte	0x2
 	.byte	0xe8
-	.4byte	0x228
+	.4byte	0x22d
 	.uleb128 0x5
 	.ascii	"TSIDL\000"
 	.byte	0x2
 	.byte	0xea
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x12
@@ -524,7 +544,7 @@ Flag_1s:
 	.ascii	"TON\000"
 	.byte	0x2
 	.byte	0xec
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x10
@@ -536,12 +556,12 @@ Flag_1s:
 	.byte	0x4
 	.byte	0x2
 	.byte	0xee
-	.4byte	0x240
+	.4byte	0x245
 	.uleb128 0x5
 	.ascii	"w\000"
 	.byte	0x2
 	.byte	0xef
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x20
 	.byte	0
@@ -553,31 +573,31 @@ Flag_1s:
 	.byte	0x4
 	.byte	0x2
 	.byte	0xd3
-	.4byte	0x25d
+	.4byte	0x262
 	.uleb128 0x7
-	.4byte	0x130
+	.4byte	0x135
 	.uleb128 0x7
-	.4byte	0x1ca
+	.4byte	0x1cf
 	.uleb128 0x7
-	.4byte	0x1fb
+	.4byte	0x200
 	.uleb128 0x7
-	.4byte	0x228
+	.4byte	0x22d
 	.byte	0
 	.uleb128 0x3
 	.ascii	"__T1CONbits_t\000"
 	.byte	0x2
 	.byte	0xf1
-	.4byte	0x240
+	.4byte	0x245
 	.uleb128 0x8
 	.byte	0x4
 	.byte	0x2
 	.2byte	0xe49
-	.4byte	0x31c
+	.4byte	0x321
 	.uleb128 0x9
 	.ascii	"INT0EP\000"
 	.byte	0x2
 	.2byte	0xe4a
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1f
@@ -588,7 +608,7 @@ Flag_1s:
 	.ascii	"INT1EP\000"
 	.byte	0x2
 	.2byte	0xe4b
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1e
@@ -599,7 +619,7 @@ Flag_1s:
 	.ascii	"INT2EP\000"
 	.byte	0x2
 	.2byte	0xe4c
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1d
@@ -610,7 +630,7 @@ Flag_1s:
 	.ascii	"INT3EP\000"
 	.byte	0x2
 	.2byte	0xe4d
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1c
@@ -621,7 +641,7 @@ Flag_1s:
 	.ascii	"INT4EP\000"
 	.byte	0x2
 	.2byte	0xe4e
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1b
@@ -632,7 +652,7 @@ Flag_1s:
 	.ascii	"TPC\000"
 	.byte	0x2
 	.2byte	0xe50
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x3
 	.byte	0x15
@@ -643,7 +663,7 @@ Flag_1s:
 	.ascii	"MVEC\000"
 	.byte	0x2
 	.2byte	0xe52
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x13
@@ -654,7 +674,7 @@ Flag_1s:
 	.ascii	"SS0\000"
 	.byte	0x2
 	.2byte	0xe54
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0xf
@@ -666,12 +686,12 @@ Flag_1s:
 	.byte	0x4
 	.byte	0x2
 	.2byte	0xe56
-	.4byte	0x336
+	.4byte	0x33b
 	.uleb128 0x9
 	.ascii	"w\000"
 	.byte	0x2
 	.2byte	0xe57
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x20
 	.byte	0
@@ -683,27 +703,27 @@ Flag_1s:
 	.byte	0x4
 	.byte	0x2
 	.2byte	0xe48
-	.4byte	0x34a
+	.4byte	0x34f
 	.uleb128 0x7
-	.4byte	0x272
+	.4byte	0x277
 	.uleb128 0x7
-	.4byte	0x31c
+	.4byte	0x321
 	.byte	0
 	.uleb128 0xb
 	.ascii	"__INTCONbits_t\000"
 	.byte	0x2
 	.2byte	0xe59
-	.4byte	0x336
+	.4byte	0x33b
 	.uleb128 0x8
 	.byte	0x4
 	.byte	0x2
 	.2byte	0xe6e
-	.4byte	0x5f1
+	.4byte	0x5f6
 	.uleb128 0x9
 	.ascii	"CTIF\000"
 	.byte	0x2
 	.2byte	0xe6f
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1f
@@ -714,7 +734,7 @@ Flag_1s:
 	.ascii	"CS0IF\000"
 	.byte	0x2
 	.2byte	0xe70
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1e
@@ -725,7 +745,7 @@ Flag_1s:
 	.ascii	"CS1IF\000"
 	.byte	0x2
 	.2byte	0xe71
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1d
@@ -736,7 +756,7 @@ Flag_1s:
 	.ascii	"INT0IF\000"
 	.byte	0x2
 	.2byte	0xe72
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1c
@@ -747,7 +767,7 @@ Flag_1s:
 	.ascii	"T1IF\000"
 	.byte	0x2
 	.2byte	0xe73
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1b
@@ -758,7 +778,7 @@ Flag_1s:
 	.ascii	"IC1EIF\000"
 	.byte	0x2
 	.2byte	0xe74
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1a
@@ -769,7 +789,7 @@ Flag_1s:
 	.ascii	"IC1IF\000"
 	.byte	0x2
 	.2byte	0xe75
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x19
@@ -780,7 +800,7 @@ Flag_1s:
 	.ascii	"OC1IF\000"
 	.byte	0x2
 	.2byte	0xe76
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x18
@@ -791,7 +811,7 @@ Flag_1s:
 	.ascii	"INT1IF\000"
 	.byte	0x2
 	.2byte	0xe77
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x17
@@ -802,7 +822,7 @@ Flag_1s:
 	.ascii	"T2IF\000"
 	.byte	0x2
 	.2byte	0xe78
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x16
@@ -813,7 +833,7 @@ Flag_1s:
 	.ascii	"IC2EIF\000"
 	.byte	0x2
 	.2byte	0xe79
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x15
@@ -824,7 +844,7 @@ Flag_1s:
 	.ascii	"IC2IF\000"
 	.byte	0x2
 	.2byte	0xe7a
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x14
@@ -835,7 +855,7 @@ Flag_1s:
 	.ascii	"OC2IF\000"
 	.byte	0x2
 	.2byte	0xe7b
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x13
@@ -846,7 +866,7 @@ Flag_1s:
 	.ascii	"INT2IF\000"
 	.byte	0x2
 	.2byte	0xe7c
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x12
@@ -857,7 +877,7 @@ Flag_1s:
 	.ascii	"T3IF\000"
 	.byte	0x2
 	.2byte	0xe7d
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x11
@@ -868,7 +888,7 @@ Flag_1s:
 	.ascii	"IC3EIF\000"
 	.byte	0x2
 	.2byte	0xe7e
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x10
@@ -879,7 +899,7 @@ Flag_1s:
 	.ascii	"IC3IF\000"
 	.byte	0x2
 	.2byte	0xe7f
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0xf
@@ -890,7 +910,7 @@ Flag_1s:
 	.ascii	"OC3IF\000"
 	.byte	0x2
 	.2byte	0xe80
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0xe
@@ -901,7 +921,7 @@ Flag_1s:
 	.ascii	"INT3IF\000"
 	.byte	0x2
 	.2byte	0xe81
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0xd
@@ -912,7 +932,7 @@ Flag_1s:
 	.ascii	"T4IF\000"
 	.byte	0x2
 	.2byte	0xe82
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0xc
@@ -923,7 +943,7 @@ Flag_1s:
 	.ascii	"IC4EIF\000"
 	.byte	0x2
 	.2byte	0xe83
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0xb
@@ -934,7 +954,7 @@ Flag_1s:
 	.ascii	"IC4IF\000"
 	.byte	0x2
 	.2byte	0xe84
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0xa
@@ -945,7 +965,7 @@ Flag_1s:
 	.ascii	"OC4IF\000"
 	.byte	0x2
 	.2byte	0xe85
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x9
@@ -956,7 +976,7 @@ Flag_1s:
 	.ascii	"INT4IF\000"
 	.byte	0x2
 	.2byte	0xe86
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x8
@@ -967,7 +987,7 @@ Flag_1s:
 	.ascii	"T5IF\000"
 	.byte	0x2
 	.2byte	0xe87
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x7
@@ -978,7 +998,7 @@ Flag_1s:
 	.ascii	"IC5EIF\000"
 	.byte	0x2
 	.2byte	0xe88
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x6
@@ -989,7 +1009,7 @@ Flag_1s:
 	.ascii	"IC5IF\000"
 	.byte	0x2
 	.2byte	0xe89
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x5
@@ -1000,7 +1020,7 @@ Flag_1s:
 	.ascii	"OC5IF\000"
 	.byte	0x2
 	.2byte	0xe8a
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x4
@@ -1011,7 +1031,7 @@ Flag_1s:
 	.ascii	"AD1IF\000"
 	.byte	0x2
 	.2byte	0xe8b
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x3
@@ -1022,7 +1042,7 @@ Flag_1s:
 	.ascii	"FSCMIF\000"
 	.byte	0x2
 	.2byte	0xe8c
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x2
@@ -1033,7 +1053,7 @@ Flag_1s:
 	.ascii	"RTCCIF\000"
 	.byte	0x2
 	.2byte	0xe8d
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1
@@ -1044,7 +1064,7 @@ Flag_1s:
 	.ascii	"FCEIF\000"
 	.byte	0x2
 	.2byte	0xe8e
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0
@@ -1056,12 +1076,12 @@ Flag_1s:
 	.byte	0x4
 	.byte	0x2
 	.2byte	0xe90
-	.4byte	0x60b
+	.4byte	0x610
 	.uleb128 0x9
 	.ascii	"w\000"
 	.byte	0x2
 	.2byte	0xe91
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x20
 	.byte	0
@@ -1073,27 +1093,27 @@ Flag_1s:
 	.byte	0x4
 	.byte	0x2
 	.2byte	0xe6d
-	.4byte	0x61f
+	.4byte	0x624
 	.uleb128 0x7
-	.4byte	0x361
+	.4byte	0x366
 	.uleb128 0x7
-	.4byte	0x5f1
+	.4byte	0x5f6
 	.byte	0
 	.uleb128 0xb
 	.ascii	"__IFS0bits_t\000"
 	.byte	0x2
 	.2byte	0xe93
-	.4byte	0x60b
+	.4byte	0x610
 	.uleb128 0x8
 	.byte	0x4
 	.byte	0x2
 	.2byte	0xedc
-	.4byte	0x8c4
+	.4byte	0x8c9
 	.uleb128 0x9
 	.ascii	"CTIE\000"
 	.byte	0x2
 	.2byte	0xedd
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1f
@@ -1104,7 +1124,7 @@ Flag_1s:
 	.ascii	"CS0IE\000"
 	.byte	0x2
 	.2byte	0xede
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1e
@@ -1115,7 +1135,7 @@ Flag_1s:
 	.ascii	"CS1IE\000"
 	.byte	0x2
 	.2byte	0xedf
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1d
@@ -1126,7 +1146,7 @@ Flag_1s:
 	.ascii	"INT0IE\000"
 	.byte	0x2
 	.2byte	0xee0
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1c
@@ -1137,7 +1157,7 @@ Flag_1s:
 	.ascii	"T1IE\000"
 	.byte	0x2
 	.2byte	0xee1
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1b
@@ -1148,7 +1168,7 @@ Flag_1s:
 	.ascii	"IC1EIE\000"
 	.byte	0x2
 	.2byte	0xee2
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1a
@@ -1159,7 +1179,7 @@ Flag_1s:
 	.ascii	"IC1IE\000"
 	.byte	0x2
 	.2byte	0xee3
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x19
@@ -1170,7 +1190,7 @@ Flag_1s:
 	.ascii	"OC1IE\000"
 	.byte	0x2
 	.2byte	0xee4
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x18
@@ -1181,7 +1201,7 @@ Flag_1s:
 	.ascii	"INT1IE\000"
 	.byte	0x2
 	.2byte	0xee5
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x17
@@ -1192,7 +1212,7 @@ Flag_1s:
 	.ascii	"T2IE\000"
 	.byte	0x2
 	.2byte	0xee6
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x16
@@ -1203,7 +1223,7 @@ Flag_1s:
 	.ascii	"IC2EIE\000"
 	.byte	0x2
 	.2byte	0xee7
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x15
@@ -1214,7 +1234,7 @@ Flag_1s:
 	.ascii	"IC2IE\000"
 	.byte	0x2
 	.2byte	0xee8
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x14
@@ -1225,7 +1245,7 @@ Flag_1s:
 	.ascii	"OC2IE\000"
 	.byte	0x2
 	.2byte	0xee9
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x13
@@ -1236,7 +1256,7 @@ Flag_1s:
 	.ascii	"INT2IE\000"
 	.byte	0x2
 	.2byte	0xeea
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x12
@@ -1247,7 +1267,7 @@ Flag_1s:
 	.ascii	"T3IE\000"
 	.byte	0x2
 	.2byte	0xeeb
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x11
@@ -1258,7 +1278,7 @@ Flag_1s:
 	.ascii	"IC3EIE\000"
 	.byte	0x2
 	.2byte	0xeec
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x10
@@ -1269,7 +1289,7 @@ Flag_1s:
 	.ascii	"IC3IE\000"
 	.byte	0x2
 	.2byte	0xeed
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0xf
@@ -1280,7 +1300,7 @@ Flag_1s:
 	.ascii	"OC3IE\000"
 	.byte	0x2
 	.2byte	0xeee
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0xe
@@ -1291,7 +1311,7 @@ Flag_1s:
 	.ascii	"INT3IE\000"
 	.byte	0x2
 	.2byte	0xeef
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0xd
@@ -1302,7 +1322,7 @@ Flag_1s:
 	.ascii	"T4IE\000"
 	.byte	0x2
 	.2byte	0xef0
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0xc
@@ -1313,7 +1333,7 @@ Flag_1s:
 	.ascii	"IC4EIE\000"
 	.byte	0x2
 	.2byte	0xef1
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0xb
@@ -1324,7 +1344,7 @@ Flag_1s:
 	.ascii	"IC4IE\000"
 	.byte	0x2
 	.2byte	0xef2
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0xa
@@ -1335,7 +1355,7 @@ Flag_1s:
 	.ascii	"OC4IE\000"
 	.byte	0x2
 	.2byte	0xef3
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x9
@@ -1346,7 +1366,7 @@ Flag_1s:
 	.ascii	"INT4IE\000"
 	.byte	0x2
 	.2byte	0xef4
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x8
@@ -1357,7 +1377,7 @@ Flag_1s:
 	.ascii	"T5IE\000"
 	.byte	0x2
 	.2byte	0xef5
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x7
@@ -1368,7 +1388,7 @@ Flag_1s:
 	.ascii	"IC5EIE\000"
 	.byte	0x2
 	.2byte	0xef6
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x6
@@ -1379,7 +1399,7 @@ Flag_1s:
 	.ascii	"IC5IE\000"
 	.byte	0x2
 	.2byte	0xef7
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x5
@@ -1390,7 +1410,7 @@ Flag_1s:
 	.ascii	"OC5IE\000"
 	.byte	0x2
 	.2byte	0xef8
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x4
@@ -1401,7 +1421,7 @@ Flag_1s:
 	.ascii	"AD1IE\000"
 	.byte	0x2
 	.2byte	0xef9
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x3
@@ -1412,7 +1432,7 @@ Flag_1s:
 	.ascii	"FSCMIE\000"
 	.byte	0x2
 	.2byte	0xefa
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x2
@@ -1423,7 +1443,7 @@ Flag_1s:
 	.ascii	"RTCCIE\000"
 	.byte	0x2
 	.2byte	0xefb
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0x1
@@ -1434,7 +1454,7 @@ Flag_1s:
 	.ascii	"FCEIE\000"
 	.byte	0x2
 	.2byte	0xefc
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x1
 	.byte	0
@@ -1446,12 +1466,12 @@ Flag_1s:
 	.byte	0x4
 	.byte	0x2
 	.2byte	0xefe
-	.4byte	0x8de
+	.4byte	0x8e3
 	.uleb128 0x9
 	.ascii	"w\000"
 	.byte	0x2
 	.2byte	0xeff
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x20
 	.byte	0
@@ -1463,27 +1483,27 @@ Flag_1s:
 	.byte	0x4
 	.byte	0x2
 	.2byte	0xedb
-	.4byte	0x8f2
+	.4byte	0x8f7
 	.uleb128 0x7
-	.4byte	0x634
+	.4byte	0x639
 	.uleb128 0x7
-	.4byte	0x8c4
+	.4byte	0x8c9
 	.byte	0
 	.uleb128 0xb
 	.ascii	"__IEC0bits_t\000"
 	.byte	0x2
 	.2byte	0xf01
-	.4byte	0x8de
+	.4byte	0x8e3
 	.uleb128 0x8
 	.byte	0x4
 	.byte	0x2
 	.2byte	0xf62
-	.4byte	0x9b1
+	.4byte	0x9b6
 	.uleb128 0x9
 	.ascii	"T1IS\000"
 	.byte	0x2
 	.2byte	0xf63
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x2
 	.byte	0x1e
@@ -1494,7 +1514,7 @@ Flag_1s:
 	.ascii	"T1IP\000"
 	.byte	0x2
 	.2byte	0xf64
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x3
 	.byte	0x1b
@@ -1505,7 +1525,7 @@ Flag_1s:
 	.ascii	"IC1IS\000"
 	.byte	0x2
 	.2byte	0xf66
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x2
 	.byte	0x16
@@ -1516,7 +1536,7 @@ Flag_1s:
 	.ascii	"IC1IP\000"
 	.byte	0x2
 	.2byte	0xf67
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x3
 	.byte	0x13
@@ -1527,7 +1547,7 @@ Flag_1s:
 	.ascii	"OC1IS\000"
 	.byte	0x2
 	.2byte	0xf69
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x2
 	.byte	0xe
@@ -1538,7 +1558,7 @@ Flag_1s:
 	.ascii	"OC1IP\000"
 	.byte	0x2
 	.2byte	0xf6a
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x3
 	.byte	0xb
@@ -1549,7 +1569,7 @@ Flag_1s:
 	.ascii	"INT1IS\000"
 	.byte	0x2
 	.2byte	0xf6c
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x2
 	.byte	0x6
@@ -1560,7 +1580,7 @@ Flag_1s:
 	.ascii	"INT1IP\000"
 	.byte	0x2
 	.2byte	0xf6d
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x3
 	.byte	0x3
@@ -1572,12 +1592,12 @@ Flag_1s:
 	.byte	0x4
 	.byte	0x2
 	.2byte	0xf6f
-	.4byte	0x9cb
+	.4byte	0x9d0
 	.uleb128 0x9
 	.ascii	"w\000"
 	.byte	0x2
 	.2byte	0xf70
-	.4byte	0xe3
+	.4byte	0xe8
 	.byte	0x4
 	.byte	0x20
 	.byte	0
@@ -1589,17 +1609,17 @@ Flag_1s:
 	.byte	0x4
 	.byte	0x2
 	.2byte	0xf61
-	.4byte	0x9df
+	.4byte	0x9e4
 	.uleb128 0x7
-	.4byte	0x907
+	.4byte	0x90c
 	.uleb128 0x7
-	.4byte	0x9b1
+	.4byte	0x9b6
 	.byte	0
 	.uleb128 0xb
 	.ascii	"__IPC1bits_t\000"
 	.byte	0x2
 	.2byte	0xf72
-	.4byte	0x9cb
+	.4byte	0x9d0
 	.uleb128 0x2
 	.byte	0x4
 	.byte	0x7
@@ -1612,7 +1632,7 @@ Flag_1s:
 	.byte	0x1
 	.ascii	"Timer1ISR\000"
 	.byte	0x1
-	.byte	0x13
+	.byte	0x14
 	.byte	0x1
 	.4byte	.LFB4
 	.4byte	.LFE4
@@ -1623,7 +1643,7 @@ Flag_1s:
 	.byte	0x1
 	.ascii	"initialize_timer_interrupt\000"
 	.byte	0x1
-	.byte	0x1c
+	.byte	0x21
 	.byte	0x1
 	.4byte	.LFB5
 	.4byte	.LFE5
@@ -1634,163 +1654,166 @@ Flag_1s:
 	.byte	0x1
 	.ascii	"main\000"
 	.byte	0x1
-	.byte	0x2a
+	.byte	0x2e
 	.4byte	.LFB6
 	.4byte	.LFE6
 	.byte	0x1
 	.byte	0x6d
 	.byte	0x1
-	.4byte	0xaf3
+	.4byte	0xaea
 	.uleb128 0xe
 	.byte	0x1
 	.4byte	.LASF0
 	.byte	0x1
-	.byte	0x2b
-	.4byte	0xdc
+	.byte	0x2f
+	.4byte	0xe1
 	.byte	0x1
-	.4byte	0xa85
+	.4byte	0xa8a
 	.uleb128 0xf
 	.byte	0
 	.uleb128 0x10
-	.ascii	"count\000"
-	.byte	0x1
-	.byte	0x2d
-	.4byte	0xdc
-	.byte	0
-	.uleb128 0x11
 	.4byte	.LBB2
 	.4byte	.LBE2
-	.4byte	0xab0
-	.uleb128 0x12
+	.4byte	0xaa7
+	.uleb128 0x11
 	.ascii	"val\000"
 	.byte	0x1
-	.byte	0x2f
-	.4byte	0xf5
+	.byte	0x32
+	.4byte	0xfa
 	.4byte	.LLST0
 	.byte	0
-	.uleb128 0x11
+	.uleb128 0x10
 	.4byte	.LBB3
 	.4byte	.LBE3
-	.4byte	0xae0
+	.4byte	0xad7
 	.uleb128 0xe
 	.byte	0x1
 	.4byte	.LASF1
 	.byte	0x1
-	.byte	0x37
-	.4byte	0xdc
+	.byte	0x38
+	.4byte	0xe1
 	.byte	0x1
-	.4byte	0xad0
+	.4byte	0xac7
 	.uleb128 0xf
 	.byte	0
-	.uleb128 0x13
+	.uleb128 0x12
 	.4byte	.LVL5
-	.4byte	0xbc3
-	.uleb128 0x14
+	.4byte	0xbce
+	.uleb128 0x13
 	.byte	0x1
 	.byte	0x54
 	.byte	0x1
 	.byte	0x30
 	.byte	0
 	.byte	0
-	.uleb128 0x15
+	.uleb128 0x14
 	.4byte	.LVL0
-	.4byte	0xbd6
-	.uleb128 0x15
+	.4byte	0xbe1
+	.uleb128 0x14
 	.4byte	.LVL1
-	.4byte	0xa2f
+	.4byte	0xa34
 	.byte	0
-	.uleb128 0x16
+	.uleb128 0x15
 	.ascii	"Flag_1s\000"
 	.byte	0x1
 	.byte	0x11
-	.4byte	0xb08
+	.4byte	0xaff
 	.byte	0x5
 	.byte	0x3
 	.4byte	Flag_1s
+	.uleb128 0x16
+	.4byte	0xe1
 	.uleb128 0x17
-	.4byte	0xdc
-	.uleb128 0x18
 	.ascii	"T1CONbits\000"
 	.byte	0x2
 	.byte	0xf2
 	.ascii	"T1CON\000"
-	.4byte	0xb26
+	.4byte	0xb1d
 	.byte	0x1
 	.byte	0x1
-	.uleb128 0x17
-	.4byte	0x25d
-	.uleb128 0x19
+	.uleb128 0x16
+	.4byte	0x262
+	.uleb128 0x18
 	.ascii	"TMR1\000"
 	.byte	0x2
 	.byte	0xf7
-	.4byte	0xb39
+	.4byte	0xb30
 	.byte	0x1
 	.byte	0x1
-	.uleb128 0x17
-	.4byte	0xe3
-	.uleb128 0x19
+	.uleb128 0x16
+	.4byte	0xe8
+	.uleb128 0x18
 	.ascii	"PR1\000"
 	.byte	0x2
 	.byte	0xfc
-	.4byte	0xb39
+	.4byte	0xb30
 	.byte	0x1
 	.byte	0x1
-	.uleb128 0x1a
+	.uleb128 0x19
 	.ascii	"INTCONbits\000"
 	.byte	0x2
 	.2byte	0xe5a
 	.ascii	"INTCON\000"
-	.4byte	0xb67
+	.4byte	0xb5e
 	.byte	0x1
 	.byte	0x1
-	.uleb128 0x17
-	.4byte	0x34a
-	.uleb128 0x1a
+	.uleb128 0x16
+	.4byte	0x34f
+	.uleb128 0x19
 	.ascii	"IFS0bits\000"
 	.byte	0x2
 	.2byte	0xe94
 	.ascii	"IFS0\000"
-	.4byte	0xb84
+	.4byte	0xb7b
 	.byte	0x1
 	.byte	0x1
-	.uleb128 0x17
-	.4byte	0x61f
-	.uleb128 0x1a
+	.uleb128 0x16
+	.4byte	0x624
+	.uleb128 0x19
 	.ascii	"IEC0bits\000"
 	.byte	0x2
 	.2byte	0xf02
 	.ascii	"IEC0\000"
-	.4byte	0xba1
+	.4byte	0xb98
 	.byte	0x1
 	.byte	0x1
-	.uleb128 0x17
-	.4byte	0x8f2
-	.uleb128 0x1a
+	.uleb128 0x16
+	.4byte	0x8f7
+	.uleb128 0x19
 	.ascii	"IPC1bits\000"
 	.byte	0x2
 	.2byte	0xf73
 	.ascii	"IPC1\000"
-	.4byte	0xbbe
+	.4byte	0xbb5
 	.byte	0x1
 	.byte	0x1
-	.uleb128 0x17
-	.4byte	0x9df
+	.uleb128 0x16
+	.4byte	0x9e4
+	.uleb128 0x1a
+	.ascii	"count\000"
+	.byte	0x1
+	.byte	0x12
+	.4byte	0xe1
+	.byte	0x1
+	.byte	0x5
+	.byte	0x3
+	.4byte	count
 	.uleb128 0xe
 	.byte	0x1
 	.4byte	.LASF1
 	.byte	0x1
-	.byte	0x37
-	.4byte	0xdc
+	.byte	0x38
+	.4byte	0xe1
 	.byte	0x1
-	.4byte	0xbd6
+	.4byte	0xbe1
 	.uleb128 0xf
 	.byte	0
 	.uleb128 0x1b
 	.byte	0x1
 	.4byte	.LASF0
 	.byte	0x1
-	.byte	0x2b
-	.4byte	0xdc
+	.byte	0x2f
+	.4byte	0xe1
 	.byte	0x1
 	.uleb128 0xf
 	.byte	0
@@ -2025,21 +2048,6 @@ Flag_1s:
 	.byte	0
 	.byte	0
 	.uleb128 0x10
-	.uleb128 0x34
-	.byte	0
-	.uleb128 0x3
-	.uleb128 0x8
-	.uleb128 0x3a
-	.uleb128 0xb
-	.uleb128 0x3b
-	.uleb128 0xb
-	.uleb128 0x49
-	.uleb128 0x13
-	.uleb128 0x1c
-	.uleb128 0xb
-	.byte	0
-	.byte	0
-	.uleb128 0x11
 	.uleb128 0xb
 	.byte	0x1
 	.uleb128 0x11
@@ -2050,7 +2058,7 @@ Flag_1s:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x12
+	.uleb128 0x11
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x3
@@ -2065,7 +2073,7 @@ Flag_1s:
 	.uleb128 0x6
 	.byte	0
 	.byte	0
-	.uleb128 0x13
+	.uleb128 0x12
 	.uleb128 0x4109
 	.byte	0x1
 	.uleb128 0x11
@@ -2074,7 +2082,7 @@ Flag_1s:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x14
+	.uleb128 0x13
 	.uleb128 0x410a
 	.byte	0
 	.uleb128 0x2
@@ -2083,7 +2091,7 @@ Flag_1s:
 	.uleb128 0xa
 	.byte	0
 	.byte	0
-	.uleb128 0x15
+	.uleb128 0x14
 	.uleb128 0x4109
 	.byte	0
 	.uleb128 0x11
@@ -2092,7 +2100,7 @@ Flag_1s:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x16
+	.uleb128 0x15
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x3
@@ -2107,11 +2115,30 @@ Flag_1s:
 	.uleb128 0xa
 	.byte	0
 	.byte	0
-	.uleb128 0x17
+	.uleb128 0x16
 	.uleb128 0x35
 	.byte	0
 	.uleb128 0x49
 	.uleb128 0x13
+	.byte	0
+	.byte	0
+	.uleb128 0x17
+	.uleb128 0x34
+	.byte	0
+	.uleb128 0x3
+	.uleb128 0x8
+	.uleb128 0x3a
+	.uleb128 0xb
+	.uleb128 0x3b
+	.uleb128 0xb
+	.uleb128 0x2007
+	.uleb128 0x8
+	.uleb128 0x49
+	.uleb128 0x13
+	.uleb128 0x3f
+	.uleb128 0xc
+	.uleb128 0x3c
+	.uleb128 0xc
 	.byte	0
 	.byte	0
 	.uleb128 0x18
@@ -2123,8 +2150,6 @@ Flag_1s:
 	.uleb128 0xb
 	.uleb128 0x3b
 	.uleb128 0xb
-	.uleb128 0x2007
-	.uleb128 0x8
 	.uleb128 0x49
 	.uleb128 0x13
 	.uleb128 0x3f
@@ -2141,7 +2166,9 @@ Flag_1s:
 	.uleb128 0x3a
 	.uleb128 0xb
 	.uleb128 0x3b
-	.uleb128 0xb
+	.uleb128 0x5
+	.uleb128 0x2007
+	.uleb128 0x8
 	.uleb128 0x49
 	.uleb128 0x13
 	.uleb128 0x3f
@@ -2158,15 +2185,13 @@ Flag_1s:
 	.uleb128 0x3a
 	.uleb128 0xb
 	.uleb128 0x3b
-	.uleb128 0x5
-	.uleb128 0x2007
-	.uleb128 0x8
+	.uleb128 0xb
 	.uleb128 0x49
 	.uleb128 0x13
 	.uleb128 0x3f
 	.uleb128 0xc
-	.uleb128 0x3c
-	.uleb128 0xc
+	.uleb128 0x2
+	.uleb128 0xa
 	.byte	0
 	.byte	0
 	.uleb128 0x1b

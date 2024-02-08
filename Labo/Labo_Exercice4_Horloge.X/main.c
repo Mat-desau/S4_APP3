@@ -11,6 +11,8 @@
 #include "config_bits.h"
 #include <string.h>
 #include "lcd.h"
+#include "btn.h"
+#include "swt.h"
 #include "led.h"
 #include "pmods.h"
 
@@ -42,7 +44,8 @@ void initialize_timer_interrupt(void) {
   T1CONbits.ON = 1;                   //    turn on Timer5
 }
 
-void main() {
+void main() 
+{
     LCD_Init();
     LED_Init();
 
@@ -54,18 +57,64 @@ void main() {
     LCD_CLEAR();
     LCD_WriteStringAtPos("Heure : ", 0, 0);
     unsigned int seconde = 0 ;
+    unsigned int compteur = 0 ;
+    unsigned int btn = 0;
 
     // Main loop
-    while(1) {
+    while(1) 
+    {     
+        //if(BTN_GetValue('C') == 1)
+        //{
+            //if(btn == 0)
+            //{
+            //    btn = 1;
+            //}
+            //else
+            //{
+            //    btn = 0;
+            //}
+        //}
         if(Flag_1m)                 // Flag d'interruption à chaque 1 ms
         {
             Flag_1m = 0;            // Reset the flag to capture the next event
             if (++count >= 1000)
             {
+                if(compteur == 8){
+                    compteur = 0;
+                }
+                
                 count = 0;
-                LCD_seconde(++seconde);
-            }
+                
+                if(SWT_GetValue(0) == 1)
+                {
+                   ++seconde;
+                } 
+                else
+                {
+                   LCD_seconde(++seconde);
+                }
+                
+                if(SWT_GetValue(1) == 1)
+                {
+                    if(compteur == 0)
+                    {
+                       LED_SetValue(7, 0); 
+                    }
+                    else
+                    {
+                      LED_SetValue(compteur-1, 0); 
+                    }
+                           
+                    LED_SetValue(compteur, 1);
+                }
+                else
+                {
+                  LED_Init();
+                }
+                ++compteur;
+            }  
         }
+        
     }
 }
 

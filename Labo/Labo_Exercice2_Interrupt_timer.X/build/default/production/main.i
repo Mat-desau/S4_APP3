@@ -1,5 +1,5 @@
 # 1 "main.c"
-# 1 "/Users/francoisdesautels/Documents/GitHub/S4_APP3/Labo_Exercice2_Interrupt_timer.X//"
+# 1 "/Users/francoisdesautels/Documents/GitHub/S4_APP3/Labo/Labo_Exercice2_Interrupt_timer.X//"
 # 1 "<command-line>"
 # 1 "main.c"
 # 10 "main.c"
@@ -7189,10 +7189,15 @@ static __inline__ void __pic32_free_coherent (void* ptr)
 
 
 static volatile int Flag_1s = 0;
+int count = 0;
 
 void __attribute__((vector(4), interrupt(IPL2AUTO), nomips16)) Timer1ISR(void)
 {
-   Flag_1s = 1;
+
+   if (++count >= 500) {
+        count = 0;
+        Flag_1s = 1;
+    }
 
    IFS0bits.T1IF = 0;
 }
@@ -7200,11 +7205,10 @@ void __attribute__((vector(4), interrupt(IPL2AUTO), nomips16)) Timer1ISR(void)
 
 
 void initialize_timer_interrupt(void) {
-  T1CONbits.TCKPS = 2;
+  T1CONbits.TCKPS = 3;
   T1CONbits.TGATE = 0;
   T1CONbits.TCS = 0;
-
-  PR1 = 1000;
+  PR1 = (int)(((float)(0.001 * 48000000) / 256) + 0.5);
   TMR1 = 0;
   IPC1bits.T1IP = 2;
   IPC1bits.T1IS = 0;
@@ -7216,7 +7220,6 @@ void initialize_timer_interrupt(void) {
 void main() {
     LED_Init();
     initialize_timer_interrupt();
-    int count = 0;
 
     { unsigned int val = 0; asm volatile("mfc0 %0,$13":"=r"(val)); val |= 0x00800000; asm volatile("mtc0 %0,$13" : "+r"(val)); INTCONbits.MVEC = 1; __builtin_enable_interrupts(); };
 
@@ -7224,10 +7227,7 @@ void main() {
     while(1) {
         if(Flag_1s) {
             Flag_1s = 0;
-            if (++count >= 1) {
-                count = 0;
-                LED_ToggleValue(0);
-            }
+            LED_ToggleValue(0);
         }
     }
 }

@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=horloge.X
+PROJECTNAME=Labo_Exercice4_Horloge.X
 
 # Active Configuration
 DEFAULTCONF=default

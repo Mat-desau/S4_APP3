@@ -5,6 +5,7 @@
  **/
 
 #include <xc.h>
+#include <string.h>
 #include "config.h"
 #include "config_bits.h"
 #include "uart.h"
@@ -27,13 +28,23 @@ void main() {
         unsigned char len = UART_GetString(receive_buffer, RECEIVE_BUFFER_LEN);
         // Check if a string is available
         if (len > 0){
-            //return the received string as feedback to the user
-            UART_PutString(receive_buffer);
-            UART_PutString("\n\r");
+            if(strcmp(receive_buffer, "Bonjours") == 0 ){
+                UART_PutString("Bonjours");
+                UART_PutString("\n\r");
 
-            LCD_DisplayClear();     // Clear what was previously written.
-            // Write the string on the first line starting at index 0
-            LCD_WriteStringAtPos(receive_buffer, 0, 0); 
+                LCD_DisplayClear();     // Clear what was previously written.
+                // Write the string on the first line starting at index 0
+                LCD_WriteStringAtPos("Au Revoir", 0, 0); 
+            }
+            else{
+                //return the received string as feedback to the user
+                UART_PutString(receive_buffer);
+                UART_PutString("\n\r");
+
+                LCD_DisplayClear();     // Clear what was previously written.
+                // Write the string on the first line starting at index 0
+                LCD_WriteStringAtPos(receive_buffer, 0, 0); 
+            }
         }
     }
 }
