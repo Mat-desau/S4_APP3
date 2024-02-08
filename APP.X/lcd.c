@@ -582,10 +582,10 @@ void int2char(int value, char * text, int nbDigit, int erase) {
     }
     value = abs(value);
     
-    int i;
+    int i = 0;
     int div = 10;
     
-    // pour les unitées
+    // pour les unitÃ©es
     text[nbDigit-i-1] = (char) (value % div) + '0'; // extrait le digit
     value = value / 10;   // divise par 10 et arrondie a la baisse.
     

@@ -56,7 +56,7 @@ void main()
 
     LCD_CLEAR();
     LCD_WriteStringAtPos("Heure : ", 0, 0);
-    unsigned int seconde = 0 ;
+    unsigned int seconde = 20000 ;
     unsigned int compteur = 0 ;
     unsigned int btn = 0;
 

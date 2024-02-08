@@ -55,7 +55,7 @@
 **     unsigned char pull-down  - the pull-down property of the pin
 **                                 0  - No pull-down
 **                                 1  - Pull-down
-**
+**#
 **	Return Value:
 **		
 **
