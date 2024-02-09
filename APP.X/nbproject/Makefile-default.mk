@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=lcd.c led.c main.c pmods.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c
+SOURCEFILES_QUOTED_IF_SPACED=lcd.c led.c main.c pmods.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/lcd.o ${OBJECTDIR}/led.o ${OBJECTDIR}/main.o ${OBJECTDIR}/pmods.o ${OBJECTDIR}/_ext/60433075/swt.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/lcd.o.d ${OBJECTDIR}/led.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/pmods.o.d ${OBJECTDIR}/_ext/60433075/swt.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/lcd.o ${OBJECTDIR}/led.o ${OBJECTDIR}/main.o ${OBJECTDIR}/pmods.o ${OBJECTDIR}/_ext/60433075/swt.o ${OBJECTDIR}/_ext/60433075/btn.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/lcd.o.d ${OBJECTDIR}/led.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/pmods.o.d ${OBJECTDIR}/_ext/60433075/swt.o.d ${OBJECTDIR}/_ext/60433075/btn.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/lcd.o ${OBJECTDIR}/led.o ${OBJECTDIR}/main.o ${OBJECTDIR}/pmods.o ${OBJECTDIR}/_ext/60433075/swt.o
+OBJECTFILES=${OBJECTDIR}/lcd.o ${OBJECTDIR}/led.o ${OBJECTDIR}/main.o ${OBJECTDIR}/pmods.o ${OBJECTDIR}/_ext/60433075/swt.o ${OBJECTDIR}/_ext/60433075/btn.o
 
 # Source Files
-SOURCEFILES=lcd.c led.c main.c pmods.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c
+SOURCEFILES=lcd.c led.c main.c pmods.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c
 
 
 
@@ -137,6 +137,12 @@ ${OBJECTDIR}/_ext/60433075/swt.o: /Users/francoisdesautels/Documents/GitHub/S4_A
 	@${RM} ${OBJECTDIR}/_ext/60433075/swt.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/swt.o.d" -o ${OBJECTDIR}/_ext/60433075/swt.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
+${OBJECTDIR}/_ext/60433075/btn.o: /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c  .generated_files/flags/default/dc32492e9826e7dc7009a7cae3cff47ed7fb2979 .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
+	@${MKDIR} "${OBJECTDIR}/_ext/60433075" 
+	@${RM} ${OBJECTDIR}/_ext/60433075/btn.o.d 
+	@${RM} ${OBJECTDIR}/_ext/60433075/btn.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/btn.o.d" -o ${OBJECTDIR}/_ext/60433075/btn.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
+	
 else
 ${OBJECTDIR}/lcd.o: lcd.c  .generated_files/flags/default/f4e0c6779c140b6d378e76491e1d56f4c51db272 .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
 	@${MKDIR} "${OBJECTDIR}" 
@@ -167,6 +173,12 @@ ${OBJECTDIR}/_ext/60433075/swt.o: /Users/francoisdesautels/Documents/GitHub/S4_A
 	@${RM} ${OBJECTDIR}/_ext/60433075/swt.o.d 
 	@${RM} ${OBJECTDIR}/_ext/60433075/swt.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/swt.o.d" -o ${OBJECTDIR}/_ext/60433075/swt.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
+	
+${OBJECTDIR}/_ext/60433075/btn.o: /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c  .generated_files/flags/default/2f2ddbf9977b6c396d2cc1b9747550e86b7a11d .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
+	@${MKDIR} "${OBJECTDIR}/_ext/60433075" 
+	@${RM} ${OBJECTDIR}/_ext/60433075/btn.o.d 
+	@${RM} ${OBJECTDIR}/_ext/60433075/btn.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/btn.o.d" -o ${OBJECTDIR}/_ext/60433075/btn.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
 endif
 
