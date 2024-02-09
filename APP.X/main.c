@@ -255,34 +255,53 @@ void I2C_Send(float *Donnees)
 
 void GestionDonnees(float Donnees[16][5], float *Minimum, float *Maximum, float *Moyenne)
 {
-    int i = 0;
+    int i = 1;
+    int n = 0;
+    
     float moyenne[5];
-    for(i ; i < 5; i++)
+    
+    for(n ; n < 5; n++)
     {
-        Minimum[i] = Donnees[0][i];
-        Maximum[i] = Donnees[0][i];
-        Moyenne[i] = Donnees[0][i];
+        moyenne[n] = 0;
     }
     
-    i = 1;
+    n = 0;
+    
+    for(n ; n < 5; n++)
+    {
+        Minimum[n] = Donnees[0][n];
+        Maximum[n] = Donnees[0][n];
+        moyenne[n] = moyenne[n] + Donnees[0][n];
+    }
+    
     
     for(i ; i < 16; i++)
     {
-        //Min
-        if(Donnees[i][0] < Minimum[0])
+        n = 0;
+        for(n ; n < 5; n++)
         {
-            Minimum[0] = Donnees[i][0];
+            if(Donnees[i][n] < Minimum[n])
+            {
+                Minimum[n] = Donnees[i][n];
+            }
+            if(Donnees[i][n] > Maximum[n])
+            {
+                Maximum[n] = Donnees[i][n];
+            }
+            
+            moyenne[n] = moyenne[n] + Donnees[i][n];
         }
-        if(Donnees[i][0] > Maximum[0])
-        {
-            Maximum[0] = Donnees[i][0];
-        }
-        moyenne[0] = moyenne[0] + Donnees[i][0];
-        moyenne[1] = moyenne[1] + Donnees[i][1];
-        moyenne[2] = moyenne[2] + Donnees[i][2];
-        moyenne[3] = moyenne[3] + Donnees[i][3];
         
     }
+    
+    n = 0;
+    
+    for(n ; n < 5; n++)
+    {
+        moyenne[n] = moyenne[n] / 16;
+        Moyenne[n] = moyenne[n];
+    }
+    n = 0;
 }
 
 void LCD_Acceleration(float *Acc_Val, float Module) 
