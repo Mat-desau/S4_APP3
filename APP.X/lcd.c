@@ -629,7 +629,6 @@ void int2char(int value, char * text, int nbDigit, int erase) {
 **      
 **          
 */
-
 void LCD_WriteIntAtPos(int value, int nbDigit, unsigned char idxLine, unsigned char idxPos, int erase) {
     // valeur  => ce qui sera affiché
     // nbDigit => nombre de chiffre à afficher

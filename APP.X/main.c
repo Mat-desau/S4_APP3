@@ -13,6 +13,8 @@
 #include "config.h"
 #include "config_bits.h"
 #include "lcd.h"
+#include "acl.h"
+#include "i2c.h"
 #include "btn.h"
 #include "swt.h"
 #include "led.h"
@@ -21,9 +23,10 @@
 // Since the flag is changed within an interrupt, we need the keyword volatile.
 static volatile int Flag_1m = 0;
 
+void LCD_Lumiere(unsigned int Potentiometre);
 void LCD_seconde(unsigned int seconde);
-void LCD_Acceleration(unsigned int X, unsigned int Y, unsigned int Z, unsigned int Module);
-void Set_Time(unsigned int *Position, unsigned int *seconde, int Up, int Down, int Left, int Right);
+void LCD_Acceleration(float *Acc_Val, float Module);
+void Set_Time(int *Position, unsigned int *seconde, int Up, int Down, int Left, int Right);
 extern void pmod_s();
 
 void __ISR(_TIMER_1_VECTOR, IPL2AUTO) Timer1ISR(void)
@@ -33,6 +36,9 @@ void __ISR(_TIMER_1_VECTOR, IPL2AUTO) Timer1ISR(void)
 }
 
 #define TMR_TIME    0.001             // x us for each tick
+
+int Save_Position = 0;
+unsigned int Save_seconde = 0 ;
 
 void initialize_timer_interrupt(void) {
   T1CONbits.TCKPS = 3;                //    256 prescaler value
@@ -53,31 +59,41 @@ void main()
     LCD_Init();
     LED_Init();
     BTN_Init();
+    SWT_Init();
+    ACL_Init();
+    ADC_Init();
 
     initialize_timer_interrupt();
 //Pour debounce
     int count = 0;
     unsigned int last_count = 0;
+    unsigned int Potentiometre = 0;
     int Time_Debounce = 100;
     
     int BTN_C = 0;
-    unsigned int Position = 0;
+    float Acc_Val[3];
+    float Module = 0;
+    int Position = 0;
     unsigned int seconde = 0 ;
     
     PMODS_InitPin(1,1,0,0,0); // initialisation du JB1 (RD9))
-    macro_enable_interrupts();
-
+    
     LCD_CLEAR();
+    
+    macro_enable_interrupts();
 
     // Main loop
     while(1) 
     {
+ //Valeurs
         int BTN_U = 0;
         int BTN_L = 0;
         int BTN_R = 0;
         int BTN_D = 0;
-
         
+        Potentiometre = ADC_AnalogRead(2);
+        
+//Debounce
         //Pour créee BTN_U      
         if(BTN_GetValue('u') == 1)
         {
@@ -136,68 +152,96 @@ void main()
             last_count = count;
         }
         
+//Debut Code
         //Rentrer dans le mode Set_Time
-        if(BTN_C == 1)
+        if(BTN_C == 1 && !SWT_GetValue(0))
         {
             Set_Time(&Position, &seconde, BTN_U, BTN_D, BTN_L, BTN_R);
-            
+            LCD_Lumiere(Potentiometre);
         }
     
         if(Flag_1m)                 
         {
-            Flag_1m = 0;            
+            Flag_1m = 0;
+            ++count;
             //Continuer a compter
-            if (++count >= 1000 && !BTN_C)
+            if (count >= 1000 && !BTN_C && !SWT_GetValue(0))
             {
                 ++seconde;
                 last_count = 0;
                 count = 0;
+                        
+                LCD_seconde(seconde);
+                LCD_Lumiere(Potentiometre);
+                LCD_WriteStringAtPos("                ", 1, 0);
+            }
+            else if(count >= 1000 && !BTN_C && SWT_GetValue(0))
+            {
+                ++seconde;
+                last_count = 0;
+                count = 0;
+                Save_seconde = seconde;
+                Save_Position = Position;
+               
+                ACL_ReadGValues(Acc_Val);
                 
-
-                if(SWT_GetValue(0) == 0)
-                {
-                   LCD_seconde(seconde);
-                   LCD_WriteStringAtPos("                ", 1, 0);
-                } 
-                else
-                {
-                   LCD_WriteStringAtPos("                ", 1, 0);
-                   LCD_WriteStringAtPos("                ", 0, 0);
-                   LCD_Acceleration(333, 444, 555, 666);
-                }
-            }  
+                LCD_Acceleration(Acc_Val, Module); 
+                
+                seconde = Save_seconde;
+                Position = Save_Position;
+            }
         }
     }
 }
 
-void LCD_Acceleration(unsigned int X, unsigned int Y, unsigned int Z, unsigned int Module) 
+void LCD_Acceleration(float *Acc_Val, float Module) 
 {
+    LCD_WriteStringAtPos("                ", 1, 0);
+    LCD_WriteStringAtPos("                ", 0, 0);
+    
     //Ligne 1
     LCD_WriteStringAtPos("X:", 0, 0);
-    LCD_WriteIntAtPos(X, 4, 0, 2, 0);
-    LCD_WriteStringAtPos("Y:", 0, 10);
-    LCD_WriteIntAtPos(Y, 4, 0, 12, 0);
+    LCD_WriteIntAtPos(Acc_Val[0], 2, 0, 2, 0);
+    LCD_WriteStringAtPos(".", 0, 4);
+    LCD_WriteIntAtPos((Acc_Val[0]*10), 1, 0, 5, 0);
+    
+    LCD_WriteStringAtPos("Y:", 0, 9);
+    LCD_WriteIntAtPos(Acc_Val[1], 2, 0, 11, 0);
+    LCD_WriteStringAtPos(".", 0, 13);
+    LCD_WriteIntAtPos(Acc_Val[1]*10, 1, 0, 14, 0);
     
     //Ligne 2
     LCD_WriteStringAtPos("Z:", 1, 0);
-    LCD_WriteIntAtPos(Z, 4, 1, 2, 0);
-    LCD_WriteStringAtPos("|A|:", 1, 8);
-    LCD_WriteIntAtPos(Module, 4, 1, 12, 0);
+    LCD_WriteIntAtPos(Acc_Val[2], 2, 1, 2, 0);
+    LCD_WriteStringAtPos(".", 1, 4);
+    LCD_WriteIntAtPos((Acc_Val[2]*10), 1, 1, 5, 0);
     
-   
+    LCD_WriteStringAtPos("|A|:", 1, 7);
+    LCD_WriteIntAtPos(Module, 4, 1, 11, 0);
+}
+
+void LCD_Lumiere(unsigned int Potentiometre)
+{
+   LCD_WriteIntAtPos(Potentiometre, 5, 0, 0, 0); 
+   LCD_WriteStringAtPos("L", 0, 0);
 }
 
 void LCD_seconde(unsigned int seconde) 
 {
-    LCD_WriteStringAtPos("Heure : ", 0, 0);
+    LCD_WriteStringAtPos("                ", 1, 0);
+    LCD_WriteStringAtPos("                ", 0, 0);
+    
     LCD_WriteIntAtPos(seconde%60, 3, 0, 13, 0);  // affichage des secondes
     LCD_WriteStringAtPos(":", 0, 13);
     LCD_WriteIntAtPos(seconde/60%60, 3, 0, 10, 0);  // affichage des minutes
     LCD_WriteStringAtPos(":", 0, 10);
     LCD_WriteIntAtPos(seconde/3600%24, 3, 0, 7, 0);  // affichage des heures
+    
+    //Ecrire Heure
+    LCD_WriteStringAtPos("H", 0, 7);
 }
 
-void Set_Time(unsigned int *Position, unsigned int *seconde, int Up, int Down, int Left, int Right)
+void Set_Time(int *Position, unsigned int *seconde, int Up, int Down, int Left, int Right)
 {
     switch (*Position)
     {
@@ -240,6 +284,8 @@ void Set_Time(unsigned int *Position, unsigned int *seconde, int Up, int Down, i
                 LCD_seconde(*seconde);
             }
             break;
+        default:
+            *Position = 0;
     }
     if(Left)
     {

@@ -11,6 +11,8 @@
       <itemPath>pmods.h</itemPath>
       <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.h</itemPath>
       <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.h</itemPath>
+      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/acl.h</itemPath>
+      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/i2c.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -25,12 +27,16 @@
       <itemPath>pmods.c</itemPath>
       <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c</itemPath>
       <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c</itemPath>
+      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/acl.c</itemPath>
+      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/i2c.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
+    <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/adc.c</itemPath>
+    <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/adc.h</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>../Labo_Exercice2_Interrupt_timer_SOLUTION.X</Elem>

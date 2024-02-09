@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=lcd.c led.c main.c pmods.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c
+SOURCEFILES_QUOTED_IF_SPACED=lcd.c led.c main.c pmods.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/acl.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/i2c.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/adc.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/lcd.o ${OBJECTDIR}/led.o ${OBJECTDIR}/main.o ${OBJECTDIR}/pmods.o ${OBJECTDIR}/_ext/60433075/swt.o ${OBJECTDIR}/_ext/60433075/btn.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/lcd.o.d ${OBJECTDIR}/led.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/pmods.o.d ${OBJECTDIR}/_ext/60433075/swt.o.d ${OBJECTDIR}/_ext/60433075/btn.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/lcd.o ${OBJECTDIR}/led.o ${OBJECTDIR}/main.o ${OBJECTDIR}/pmods.o ${OBJECTDIR}/_ext/60433075/swt.o ${OBJECTDIR}/_ext/60433075/btn.o ${OBJECTDIR}/_ext/60433075/acl.o ${OBJECTDIR}/_ext/60433075/i2c.o ${OBJECTDIR}/_ext/60433075/adc.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/lcd.o.d ${OBJECTDIR}/led.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/pmods.o.d ${OBJECTDIR}/_ext/60433075/swt.o.d ${OBJECTDIR}/_ext/60433075/btn.o.d ${OBJECTDIR}/_ext/60433075/acl.o.d ${OBJECTDIR}/_ext/60433075/i2c.o.d ${OBJECTDIR}/_ext/60433075/adc.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/lcd.o ${OBJECTDIR}/led.o ${OBJECTDIR}/main.o ${OBJECTDIR}/pmods.o ${OBJECTDIR}/_ext/60433075/swt.o ${OBJECTDIR}/_ext/60433075/btn.o
+OBJECTFILES=${OBJECTDIR}/lcd.o ${OBJECTDIR}/led.o ${OBJECTDIR}/main.o ${OBJECTDIR}/pmods.o ${OBJECTDIR}/_ext/60433075/swt.o ${OBJECTDIR}/_ext/60433075/btn.o ${OBJECTDIR}/_ext/60433075/acl.o ${OBJECTDIR}/_ext/60433075/i2c.o ${OBJECTDIR}/_ext/60433075/adc.o
 
 # Source Files
-SOURCEFILES=lcd.c led.c main.c pmods.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c
+SOURCEFILES=lcd.c led.c main.c pmods.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/acl.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/i2c.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/adc.c
 
 
 
@@ -143,6 +143,24 @@ ${OBJECTDIR}/_ext/60433075/btn.o: /Users/francoisdesautels/Documents/GitHub/S4_A
 	@${RM} ${OBJECTDIR}/_ext/60433075/btn.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/btn.o.d" -o ${OBJECTDIR}/_ext/60433075/btn.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
+${OBJECTDIR}/_ext/60433075/acl.o: /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/acl.c  .generated_files/flags/default/d6f4c093a4947aaa12dd11470c166993c67ebd94 .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
+	@${MKDIR} "${OBJECTDIR}/_ext/60433075" 
+	@${RM} ${OBJECTDIR}/_ext/60433075/acl.o.d 
+	@${RM} ${OBJECTDIR}/_ext/60433075/acl.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/acl.o.d" -o ${OBJECTDIR}/_ext/60433075/acl.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/acl.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
+	
+${OBJECTDIR}/_ext/60433075/i2c.o: /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/i2c.c  .generated_files/flags/default/35c2d6e0f9d06179c56ff0b33d3f89df719d676a .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
+	@${MKDIR} "${OBJECTDIR}/_ext/60433075" 
+	@${RM} ${OBJECTDIR}/_ext/60433075/i2c.o.d 
+	@${RM} ${OBJECTDIR}/_ext/60433075/i2c.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/i2c.o.d" -o ${OBJECTDIR}/_ext/60433075/i2c.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/i2c.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
+	
+${OBJECTDIR}/_ext/60433075/adc.o: /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/adc.c  .generated_files/flags/default/b9c0870b6cb67124c7b8c4f8a9c207bebf3b30bf .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
+	@${MKDIR} "${OBJECTDIR}/_ext/60433075" 
+	@${RM} ${OBJECTDIR}/_ext/60433075/adc.o.d 
+	@${RM} ${OBJECTDIR}/_ext/60433075/adc.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/adc.o.d" -o ${OBJECTDIR}/_ext/60433075/adc.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/adc.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
+	
 else
 ${OBJECTDIR}/lcd.o: lcd.c  .generated_files/flags/default/f4e0c6779c140b6d378e76491e1d56f4c51db272 .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
 	@${MKDIR} "${OBJECTDIR}" 
@@ -179,6 +197,24 @@ ${OBJECTDIR}/_ext/60433075/btn.o: /Users/francoisdesautels/Documents/GitHub/S4_A
 	@${RM} ${OBJECTDIR}/_ext/60433075/btn.o.d 
 	@${RM} ${OBJECTDIR}/_ext/60433075/btn.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/btn.o.d" -o ${OBJECTDIR}/_ext/60433075/btn.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
+	
+${OBJECTDIR}/_ext/60433075/acl.o: /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/acl.c  .generated_files/flags/default/7dd4ba12c8fad777aba41810c321027bc555315b .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
+	@${MKDIR} "${OBJECTDIR}/_ext/60433075" 
+	@${RM} ${OBJECTDIR}/_ext/60433075/acl.o.d 
+	@${RM} ${OBJECTDIR}/_ext/60433075/acl.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/acl.o.d" -o ${OBJECTDIR}/_ext/60433075/acl.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/acl.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
+	
+${OBJECTDIR}/_ext/60433075/i2c.o: /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/i2c.c  .generated_files/flags/default/af219a69240a8514d140b6ef219808396b007b5f .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
+	@${MKDIR} "${OBJECTDIR}/_ext/60433075" 
+	@${RM} ${OBJECTDIR}/_ext/60433075/i2c.o.d 
+	@${RM} ${OBJECTDIR}/_ext/60433075/i2c.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/i2c.o.d" -o ${OBJECTDIR}/_ext/60433075/i2c.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/i2c.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
+	
+${OBJECTDIR}/_ext/60433075/adc.o: /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/adc.c  .generated_files/flags/default/8ec20198120d729fd56a5dd604320f236939d76b .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
+	@${MKDIR} "${OBJECTDIR}/_ext/60433075" 
+	@${RM} ${OBJECTDIR}/_ext/60433075/adc.o.d 
+	@${RM} ${OBJECTDIR}/_ext/60433075/adc.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/adc.o.d" -o ${OBJECTDIR}/_ext/60433075/adc.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/adc.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
 endif
 
