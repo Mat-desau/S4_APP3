@@ -26,7 +26,7 @@ static volatile int Flag_1m = 0;
 void LCD_Lumiere(unsigned int Potentiometre);
 void LCD_seconde(unsigned int seconde);
 void LCD_Acceleration(float *Acc_Val, float Module);
-void Set_Time(int *Position, unsigned int *seconde, int Up, int Down, int Left, int Right);
+void Set_Time(int *Position, unsigned int *seconde, unsigned int Potentiometre, int Up, int Down, int Left, int Right);
 extern void pmod_s();
 
 void __ISR(_TIMER_1_VECTOR, IPL2AUTO) Timer1ISR(void)
@@ -115,7 +115,7 @@ void main()
         }
         
         //Pour créee BTN_C      
-        if(BTN_GetValue('c') == 1)
+        if(BTN_GetValue('c') == 1 && !SWT_GetValue(0))
         {
             if(BTN_C == 0 && (count - last_count > Time_Debounce))
             {
@@ -156,8 +156,7 @@ void main()
         //Rentrer dans le mode Set_Time
         if(BTN_C == 1 && !SWT_GetValue(0))
         {
-            Set_Time(&Position, &seconde, BTN_U, BTN_D, BTN_L, BTN_R);
-            LCD_Lumiere(Potentiometre);
+            Set_Time(&Position, &seconde, Potentiometre, BTN_U, BTN_D, BTN_L, BTN_R);
         }
     
         if(Flag_1m)                 
@@ -173,7 +172,6 @@ void main()
                         
                 LCD_seconde(seconde);
                 LCD_Lumiere(Potentiometre);
-                LCD_WriteStringAtPos("                ", 1, 0);
             }
             else if(count >= 1000 && !BTN_C && SWT_GetValue(0))
             {
@@ -189,6 +187,12 @@ void main()
                 
                 seconde = Save_seconde;
                 Position = Save_Position;
+            }
+            else if(count >= 1000 && BTN_C & !SWT_GetValue(0))
+            {
+                LCD_Lumiere(Potentiometre);
+                last_count = 0;
+                count = 0;
             }
         }
     }
@@ -241,7 +245,7 @@ void LCD_seconde(unsigned int seconde)
     LCD_WriteStringAtPos("H", 0, 7);
 }
 
-void Set_Time(int *Position, unsigned int *seconde, int Up, int Down, int Left, int Right)
+void Set_Time(int *Position, unsigned int *seconde, unsigned int Potentiometre, int Up, int Down, int Left, int Right)
 {
     switch (*Position)
     {
@@ -251,11 +255,13 @@ void Set_Time(int *Position, unsigned int *seconde, int Up, int Down, int Left, 
             {
                 *seconde = *seconde + 3600;
                 LCD_seconde(*seconde);
+                LCD_Lumiere(Potentiometre);
             }
             else if(Down)
             {
                 *seconde = *seconde - 3600;
                 LCD_seconde(*seconde);
+                LCD_Lumiere(Potentiometre);
             }
             break;
         case 1:
@@ -264,11 +270,13 @@ void Set_Time(int *Position, unsigned int *seconde, int Up, int Down, int Left, 
             {
                 *seconde = *seconde + 60; 
                 LCD_seconde(*seconde);
+                LCD_Lumiere(Potentiometre);
             }
             else if(Down)
             {
                 *seconde = *seconde - 60;
                 LCD_seconde(*seconde);
+                LCD_Lumiere(Potentiometre);
             }
             break;
         case 2:
@@ -277,11 +285,13 @@ void Set_Time(int *Position, unsigned int *seconde, int Up, int Down, int Left, 
             {
                 *seconde = *seconde + 1; 
                 LCD_seconde(*seconde);
+                LCD_Lumiere(Potentiometre);
             }
             else if(Down)
             {
                 *seconde = *seconde - 1; 
                 LCD_seconde(*seconde);
+                LCD_Lumiere(Potentiometre);
             }
             break;
         default:
@@ -291,12 +301,10 @@ void Set_Time(int *Position, unsigned int *seconde, int Up, int Down, int Left, 
     {
         if(*Position <= 0)
         {
-            //LCD_WriteStringAtPos("             ", 1, 0);
             *Position = 3;
         }
         else
         {
-            //LCD_WriteStringAtPos("             ", 1, 0);
             *Position = *Position - 1;
         }
         LCD_WriteStringAtPos("  ", 1, 8);
@@ -307,12 +315,10 @@ void Set_Time(int *Position, unsigned int *seconde, int Up, int Down, int Left, 
     {
         if(*Position >= 2)
         {
-            //LCD_WriteStringAtPos("             ", 1, 0);
             *Position = 0;
         }
         else
         {
-            //LCD_WriteStringAtPos("             ", 1, 0);
             *Position = *Position + 1;
         }
         LCD_WriteStringAtPos("  ", 1, 8);
