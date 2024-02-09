@@ -33,7 +33,7 @@ void LCD_Lumiere(unsigned int Potentiometre);
 void LCD_seconde(unsigned int seconde);
 void LCD_Acceleration(float *Acc_Val, float Module);
 void GestionDonnees(float Donnees[16][5], float *Minimum, float *Maximum, float *Moyenne);
-void I2C_Send(float *Donnees);
+void I2C_Send(float *Minimum, float *Maximum, float *Moyenne);
 void Set_Time(int *Position, unsigned int *seconde, unsigned int Potentiometre, int Up, int Down, int Left, int Right);
 extern void pmod_s();
 
@@ -232,6 +232,7 @@ void main()
                 if(count_save == 16)
                 {
                     GestionDonnees(Valeur_Save, Minimum, Maximum, Moyenne);
+                    I2C_Send(Minimum, Maximum, Moyenne);
                     //I2C_Send(Valeur_Save);
                 }
                 
@@ -247,10 +248,21 @@ void __ISR(_TIMER_1_VECTOR, IPL2AUTO) Timer1ISR(void)
    IFS0bits.T1IF = 0;     //    clear interrupt flag
 }
 
-void I2C_Send(float *Donnees)
+void I2C_Send(float *Minimum, float *Maximum, float *Moyenne)
 {
-    UART_PutString("0101");
-    UART_PutString("\n\r");  
+    int n = 0;
+    
+    for(n ; n < 5; n++)
+    {
+       UART_PutString(Minimum[n]);
+       UART_PutString("//");
+       UART_PutString(Maximum[n]);
+       UART_PutString("//");
+       UART_PutString(Moyenne[n]);
+       UART_PutString("\n\r");
+    }
+    
+      
 }
 
 void GestionDonnees(float Donnees[16][5], float *Minimum, float *Maximum, float *Moyenne)
