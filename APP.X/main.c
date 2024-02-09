@@ -23,8 +23,7 @@ static volatile int Flag_1m = 0;
 
 void LCD_seconde(unsigned int seconde);
 void LCD_Acceleration(unsigned int X, unsigned int Y, unsigned int Z, unsigned int Module);
-unsigned int Position_fct(unsigned Position);
-void Set_Time(unsigned int *Position, unsigned int *seconde, unsigned char Up, unsigned char Down, unsigned char Left, unsigned char Right);
+void Set_Time(unsigned int *Position, unsigned int *seconde, int Up, int Down, int Left, int Right);
 extern void pmod_s();
 
 void __ISR(_TIMER_1_VECTOR, IPL2AUTO) Timer1ISR(void)
@@ -53,14 +52,15 @@ void main()
 {
     LCD_Init();
     LED_Init();
+    BTN_Init();
 
     initialize_timer_interrupt();
 //Pour debounce
     int count = 0;
-    int last_countC, last_countU, last_countD, last_countL, last_countR, last_count = 0;
+    unsigned int last_count = 0;
     int Time_Debounce = 100;
     
-    int BTN_C, BTN_U, BTN_D, BTN_L, BTN_R = 0;
+    int BTN_C = 0;
     unsigned int Position = 0;
     unsigned int seconde = 0 ;
     
@@ -72,11 +72,14 @@ void main()
     // Main loop
     while(1) 
     {
-        BTN_U, BTN_L, BTN_R, BTN_D = 0;
+        int BTN_U = 0;
+        int BTN_L = 0;
+        int BTN_R = 0;
+        int BTN_D = 0;
 
         
         //Pour créee BTN_U      
-        if(BTN_GetValue(0) == 1)
+        if(BTN_GetValue('u') == 1)
         {
             if(BTN_U == 0 && (count - last_count > Time_Debounce))
             {
@@ -86,7 +89,7 @@ void main()
         }
         
         //Pour créee BTN_L      
-        if(BTN_GetValue(1) == 1)
+        if(BTN_GetValue('l') == 1)
         {
             if(BTN_L == 0 && (count - last_count > Time_Debounce))
             {
@@ -96,7 +99,7 @@ void main()
         }
         
         //Pour créee BTN_C      
-        if(BTN_GetValue(2) == 1)
+        if(BTN_GetValue('c') == 1)
         {
             if(BTN_C == 0 && (count - last_count > Time_Debounce))
             {
@@ -106,12 +109,15 @@ void main()
             {
                 count = 0;
                 BTN_C = 0;
+                LCD_WriteStringAtPos("  ", 1, 8);
+                LCD_WriteStringAtPos("  ", 1, 11);
+                LCD_WriteStringAtPos("  ", 1, 14);
             }
             last_count = count;
         }
 
         //Pour créee BTN_R      
-        if(BTN_GetValue(3) == 1)
+        if(BTN_GetValue('r') == 1)
         {
             if(BTN_R == 0 && (count - last_count > Time_Debounce))
             {
@@ -121,7 +127,7 @@ void main()
         }
         
         //Pour créee BTN_D      
-        if(BTN_GetValue(4) == 1)
+        if(BTN_GetValue('d') == 1)
         {
             if(BTN_D == 0 && (count - last_count > Time_Debounce))
             {
@@ -134,7 +140,7 @@ void main()
         if(BTN_C == 1)
         {
             Set_Time(&Position, &seconde, BTN_U, BTN_D, BTN_L, BTN_R);
-            LCD_seconde(seconde);
+            
         }
     
         if(Flag_1m)                 
@@ -144,7 +150,7 @@ void main()
             if (++count >= 1000 && !BTN_C)
             {
                 ++seconde;
-                last_countC, last_countU, last_countD, last_countL, last_countR = 0;
+                last_count = 0;
                 count = 0;
                 
 
@@ -179,76 +185,81 @@ void LCD_seconde(unsigned int seconde)
     LCD_WriteIntAtPos(seconde/3600%24, 3, 0, 7, 0);  // affichage des heures
 }
 
-void Set_Time(unsigned int *Position, unsigned int *seconde, unsigned char Up, unsigned char Down, unsigned char Left, unsigned char Right)
+void Set_Time(unsigned int *Position, unsigned int *seconde, int Up, int Down, int Left, int Right)
 {
     switch (*Position)
     {
         case 0:
             LCD_WriteStringAtPos("::", 1, 8);
-            if(Up == 1)
+            if(Up)
             {
                 *seconde = *seconde + 3600;
-                break;
+                LCD_seconde(*seconde);
             }
-            else if(Down == 1)
+            else if(Down)
             {
                 *seconde = *seconde - 3600;
-                break;
-                
+                LCD_seconde(*seconde);
             }
             break;
         case 1:
             LCD_WriteStringAtPos("::", 1, 11);
-            if(Up == 1)
+            if(Up)
             {
-                *seconde = *seconde + 60;  
-                break;
+                *seconde = *seconde + 60; 
+                LCD_seconde(*seconde);
             }
-            else if(Down == 1)
+            else if(Down)
             {
-                *seconde = *seconde - 60; 
-                break;
+                *seconde = *seconde - 60;
+                LCD_seconde(*seconde);
             }
             break;
         case 2:
             LCD_WriteStringAtPos("::", 1, 14);
-            if(Up == 1)
+            if(Up)
             {
                 *seconde = *seconde + 1; 
-                break;
+                LCD_seconde(*seconde);
             }
-            else if(Down == 1)
+            else if(Down)
             {
                 *seconde = *seconde - 1; 
-                break;
+                LCD_seconde(*seconde);
             }
             break;
     }
-    if(Left == 1)
+    if(Left)
     {
-        if(*Position == 0)
+        if(*Position <= 0)
         {
-            LCD_WriteStringAtPos("             ", 1, 0);
+            //LCD_WriteStringAtPos("             ", 1, 0);
+            *Position = 3;
+        }
+        else
+        {
+            //LCD_WriteStringAtPos("             ", 1, 0);
+            *Position = *Position - 1;
+        }
+        LCD_WriteStringAtPos("  ", 1, 8);
+        LCD_WriteStringAtPos("  ", 1, 11);
+        LCD_WriteStringAtPos("  ", 1, 14);
+    }
+    if(Right)
+    {
+        if(*Position >= 2)
+        {
+            //LCD_WriteStringAtPos("             ", 1, 0);
             *Position = 0;
         }
         else
         {
-            LCD_WriteStringAtPos("             ", 1, 0);
-            *Position = *Position - 1;
-        }
-    }
-    if(Right == 1)
-    {
-        if(*Position == 2)
-        {
-            LCD_WriteStringAtPos("             ", 1, 0);
-            *Position = 2;
-        }
-        else
-        {
-            LCD_WriteStringAtPos("             ", 1, 0);
+            //LCD_WriteStringAtPos("             ", 1, 0);
             *Position = *Position + 1;
         }
+        LCD_WriteStringAtPos("  ", 1, 8);
+        LCD_WriteStringAtPos("  ", 1, 11);
+        LCD_WriteStringAtPos("  ", 1, 14);
     }
 }
 
