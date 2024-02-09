@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=lcd.c led.c main.c pmods.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/acl.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/i2c.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/adc.c
+SOURCEFILES_QUOTED_IF_SPACED=lcd.c led.c main.c pmods.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/acl.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/i2c.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/adc.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/spiflash.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/uart.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/lcd.o ${OBJECTDIR}/led.o ${OBJECTDIR}/main.o ${OBJECTDIR}/pmods.o ${OBJECTDIR}/_ext/60433075/swt.o ${OBJECTDIR}/_ext/60433075/btn.o ${OBJECTDIR}/_ext/60433075/acl.o ${OBJECTDIR}/_ext/60433075/i2c.o ${OBJECTDIR}/_ext/60433075/adc.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/lcd.o.d ${OBJECTDIR}/led.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/pmods.o.d ${OBJECTDIR}/_ext/60433075/swt.o.d ${OBJECTDIR}/_ext/60433075/btn.o.d ${OBJECTDIR}/_ext/60433075/acl.o.d ${OBJECTDIR}/_ext/60433075/i2c.o.d ${OBJECTDIR}/_ext/60433075/adc.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/lcd.o ${OBJECTDIR}/led.o ${OBJECTDIR}/main.o ${OBJECTDIR}/pmods.o ${OBJECTDIR}/_ext/60433075/swt.o ${OBJECTDIR}/_ext/60433075/btn.o ${OBJECTDIR}/_ext/60433075/acl.o ${OBJECTDIR}/_ext/60433075/i2c.o ${OBJECTDIR}/_ext/60433075/adc.o ${OBJECTDIR}/_ext/60433075/spiflash.o ${OBJECTDIR}/_ext/60433075/uart.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/lcd.o.d ${OBJECTDIR}/led.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/pmods.o.d ${OBJECTDIR}/_ext/60433075/swt.o.d ${OBJECTDIR}/_ext/60433075/btn.o.d ${OBJECTDIR}/_ext/60433075/acl.o.d ${OBJECTDIR}/_ext/60433075/i2c.o.d ${OBJECTDIR}/_ext/60433075/adc.o.d ${OBJECTDIR}/_ext/60433075/spiflash.o.d ${OBJECTDIR}/_ext/60433075/uart.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/lcd.o ${OBJECTDIR}/led.o ${OBJECTDIR}/main.o ${OBJECTDIR}/pmods.o ${OBJECTDIR}/_ext/60433075/swt.o ${OBJECTDIR}/_ext/60433075/btn.o ${OBJECTDIR}/_ext/60433075/acl.o ${OBJECTDIR}/_ext/60433075/i2c.o ${OBJECTDIR}/_ext/60433075/adc.o
+OBJECTFILES=${OBJECTDIR}/lcd.o ${OBJECTDIR}/led.o ${OBJECTDIR}/main.o ${OBJECTDIR}/pmods.o ${OBJECTDIR}/_ext/60433075/swt.o ${OBJECTDIR}/_ext/60433075/btn.o ${OBJECTDIR}/_ext/60433075/acl.o ${OBJECTDIR}/_ext/60433075/i2c.o ${OBJECTDIR}/_ext/60433075/adc.o ${OBJECTDIR}/_ext/60433075/spiflash.o ${OBJECTDIR}/_ext/60433075/uart.o
 
 # Source Files
-SOURCEFILES=lcd.c led.c main.c pmods.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/acl.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/i2c.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/adc.c
+SOURCEFILES=lcd.c led.c main.c pmods.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/acl.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/i2c.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/adc.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/spiflash.c /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/uart.c
 
 
 
@@ -161,6 +161,18 @@ ${OBJECTDIR}/_ext/60433075/adc.o: /Users/francoisdesautels/Documents/GitHub/S4_A
 	@${RM} ${OBJECTDIR}/_ext/60433075/adc.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/adc.o.d" -o ${OBJECTDIR}/_ext/60433075/adc.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/adc.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
+${OBJECTDIR}/_ext/60433075/spiflash.o: /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/spiflash.c  .generated_files/flags/default/f7894699a9903450b84d8953434b70c5199542e4 .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
+	@${MKDIR} "${OBJECTDIR}/_ext/60433075" 
+	@${RM} ${OBJECTDIR}/_ext/60433075/spiflash.o.d 
+	@${RM} ${OBJECTDIR}/_ext/60433075/spiflash.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/spiflash.o.d" -o ${OBJECTDIR}/_ext/60433075/spiflash.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/spiflash.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
+	
+${OBJECTDIR}/_ext/60433075/uart.o: /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/uart.c  .generated_files/flags/default/88e6fe568b48e3b2a11dbf53666588a4343964c1 .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
+	@${MKDIR} "${OBJECTDIR}/_ext/60433075" 
+	@${RM} ${OBJECTDIR}/_ext/60433075/uart.o.d 
+	@${RM} ${OBJECTDIR}/_ext/60433075/uart.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/uart.o.d" -o ${OBJECTDIR}/_ext/60433075/uart.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/uart.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
+	
 else
 ${OBJECTDIR}/lcd.o: lcd.c  .generated_files/flags/default/f4e0c6779c140b6d378e76491e1d56f4c51db272 .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
 	@${MKDIR} "${OBJECTDIR}" 
@@ -215,6 +227,18 @@ ${OBJECTDIR}/_ext/60433075/adc.o: /Users/francoisdesautels/Documents/GitHub/S4_A
 	@${RM} ${OBJECTDIR}/_ext/60433075/adc.o.d 
 	@${RM} ${OBJECTDIR}/_ext/60433075/adc.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/adc.o.d" -o ${OBJECTDIR}/_ext/60433075/adc.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/adc.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
+	
+${OBJECTDIR}/_ext/60433075/spiflash.o: /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/spiflash.c  .generated_files/flags/default/e127cfa3f8ae640fed00d4b057549f70a9e79759 .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
+	@${MKDIR} "${OBJECTDIR}/_ext/60433075" 
+	@${RM} ${OBJECTDIR}/_ext/60433075/spiflash.o.d 
+	@${RM} ${OBJECTDIR}/_ext/60433075/spiflash.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/spiflash.o.d" -o ${OBJECTDIR}/_ext/60433075/spiflash.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/spiflash.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
+	
+${OBJECTDIR}/_ext/60433075/uart.o: /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/uart.c  .generated_files/flags/default/75aa204535cb7b00aae34026217ed7a94e247a2b .generated_files/flags/default/60b5199efda4ab7dde2ee3b07785d0c76011075a
+	@${MKDIR} "${OBJECTDIR}/_ext/60433075" 
+	@${RM} ${OBJECTDIR}/_ext/60433075/uart.o.d 
+	@${RM} ${OBJECTDIR}/_ext/60433075/uart.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/_ext/60433075/uart.o.d" -o ${OBJECTDIR}/_ext/60433075/uart.o /Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/uart.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
 endif
 

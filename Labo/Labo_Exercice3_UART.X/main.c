@@ -27,7 +27,8 @@ void main() {
     while(1) {
         unsigned char len = UART_GetString(receive_buffer, RECEIVE_BUFFER_LEN);
         // Check if a string is available
-        if (len > 0){
+        if (len > 0)
+        {
             if(strcmp(receive_buffer, "Bonjours") == 0 ){
                 UART_PutString("Bonjours");
                 UART_PutString("\n\r");

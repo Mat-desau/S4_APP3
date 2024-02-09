@@ -19,26 +19,29 @@
 #include "swt.h"
 #include "led.h"
 #include "pmods.h"
+#include "spiflash.h"
+#include "uart.h"
 
-// Since the flag is changed within an interrupt, we need the keyword volatile.
+// Variables globales
 static volatile int Flag_1m = 0;
+int Save_Position = 0;
+unsigned int Save_seconde = 0 ;
 
+//Fonctions
+void __ISR(_TIMER_1_VECTOR, IPL2AUTO) Timer1ISR(void);
 void LCD_Lumiere(unsigned int Potentiometre);
 void LCD_seconde(unsigned int seconde);
 void LCD_Acceleration(float *Acc_Val, float Module);
+void GestionDonnees(float Donnees[16][5], float *Minimum, float *Maximum, float *Moyenne);
+void I2C_Send(float *Donnees);
 void Set_Time(int *Position, unsigned int *seconde, unsigned int Potentiometre, int Up, int Down, int Left, int Right);
 extern void pmod_s();
 
-void __ISR(_TIMER_1_VECTOR, IPL2AUTO) Timer1ISR(void)
-{
-   Flag_1m = 1;           //    Indique à la boucle principale qu'on doit traiter
-   IFS0bits.T1IF = 0;     //    clear interrupt flag
-}
 
+#define BAUD_RATE 9600
 #define TMR_TIME    0.001             // x us for each tick
+#define RECEIVE_BUFFER_LEN  cchRxMax
 
-int Save_Position = 0;
-unsigned int Save_seconde = 0 ;
 
 void initialize_timer_interrupt(void) {
   T1CONbits.TCKPS = 3;                //    256 prescaler value
@@ -62,23 +65,28 @@ void main()
     SWT_Init();
     ACL_Init();
     ADC_Init();
-
+    SPIFLASH_Init();
+    
+    LCD_CLEAR();
+    PMODS_InitPin(1,1,0,0,0); // initialisation du JB1 (RD9))
+    
     initialize_timer_interrupt();
 //Pour debounce
     int count = 0;
+    int count_save = 0;
     unsigned int last_count = 0;
     unsigned int Potentiometre = 0;
     int Time_Debounce = 100;
     
     int BTN_C = 0;
     float Acc_Val[3];
+    float Valeur_Save[16][5];      //X, Y, Z, Module, Potentiomètre
+    float Minimum[5];
+    float Maximum[5];
+    float Moyenne[5];
     float Module = 0;
     int Position = 0;
     unsigned int seconde = 0 ;
-    
-    PMODS_InitPin(1,1,0,0,0); // initialisation du JB1 (RD9))
-    
-    LCD_CLEAR();
     
     macro_enable_interrupts();
 
@@ -168,7 +176,15 @@ void main()
             {
                 ++seconde;
                 last_count = 0;
-                count = 0;
+                //count = 0;
+                
+                Save_seconde = seconde;
+                Save_Position = Position;
+                
+                ACL_ReadGValues(Acc_Val);
+                
+                seconde = Save_seconde;
+                Position = Save_Position;
                         
                 LCD_seconde(seconde);
                 LCD_Lumiere(Potentiometre);
@@ -177,7 +193,7 @@ void main()
             {
                 ++seconde;
                 last_count = 0;
-                count = 0;
+                //count = 0;
                 Save_seconde = seconde;
                 Save_Position = Position;
                
@@ -192,9 +208,80 @@ void main()
             {
                 LCD_Lumiere(Potentiometre);
                 last_count = 0;
-                count = 0;
+                //count = 0;
             }
+            if(count >= 1000)
+            {
+                //Mettre dans les valeurs
+                if(count_save == 16)
+                {
+                    count_save = 0;
+                }
+                if(count_save < 16)
+                {
+                   Valeur_Save[count_save][0] = Acc_Val[0];
+                   Valeur_Save[count_save][1] = Acc_Val[1];
+                   Valeur_Save[count_save][2] = Acc_Val[2];
+                   Valeur_Save[count_save][3] = Module;
+                   Valeur_Save[count_save][4] = Potentiometre;
+                }
+                
+                ++count_save;
+                count = 0;
+                
+                if(count_save == 16)
+                {
+                    GestionDonnees(Valeur_Save, Minimum, Maximum, Moyenne);
+                    //I2C_Send(Valeur_Save);
+                }
+                
+            }
+            
         }
+    }
+}
+
+void __ISR(_TIMER_1_VECTOR, IPL2AUTO) Timer1ISR(void)
+{
+   Flag_1m = 1;           //    Indique à la boucle principale qu'on doit traiter
+   IFS0bits.T1IF = 0;     //    clear interrupt flag
+}
+
+void I2C_Send(float *Donnees)
+{
+    UART_PutString("0101");
+    UART_PutString("\n\r");  
+}
+
+void GestionDonnees(float Donnees[16][5], float *Minimum, float *Maximum, float *Moyenne)
+{
+    int i = 0;
+    float moyenne[5];
+    for(i ; i < 5; i++)
+    {
+        Minimum[i] = Donnees[0][i];
+        Maximum[i] = Donnees[0][i];
+        Moyenne[i] = Donnees[0][i];
+    }
+    
+    i = 1;
+    
+    for(i ; i < 16; i++)
+    {
+        //Min
+        if(Donnees[i][0] < Minimum[0])
+        {
+            Minimum[0] = Donnees[i][0];
+        }
+        if(Donnees[i][0] > Maximum[0])
+        {
+            Maximum[0] = Donnees[i][0];
+        }
+        moyenne[0] = moyenne[0] + Donnees[i][0];
+        moyenne[1] = moyenne[1] + Donnees[i][1];
+        moyenne[2] = moyenne[2] + Donnees[i][2];
+        moyenne[3] = moyenne[3] + Donnees[i][3];
+        
     }
 }
 
@@ -203,22 +290,49 @@ void LCD_Acceleration(float *Acc_Val, float Module)
     LCD_WriteStringAtPos("                ", 1, 0);
     LCD_WriteStringAtPos("                ", 0, 0);
     
-    //Ligne 1
+    //X
     LCD_WriteStringAtPos("X:", 0, 0);
-    LCD_WriteIntAtPos(Acc_Val[0], 2, 0, 2, 0);
+    if(Acc_Val[0] < 0)
+    {
+       LCD_WriteIntAtPos(Acc_Val[0], 2, 0, 2, 0);
+       LCD_WriteStringAtPos("-", 0, 2);
+    }
+    else
+    {
+        LCD_WriteIntAtPos(Acc_Val[0], 2, 0, 2, 0);  
+    }
     LCD_WriteStringAtPos(".", 0, 4);
     LCD_WriteIntAtPos((Acc_Val[0]*10), 1, 0, 5, 0);
     
+    //Y
     LCD_WriteStringAtPos("Y:", 0, 9);
-    LCD_WriteIntAtPos(Acc_Val[1], 2, 0, 11, 0);
+    if(Acc_Val[1] < 0)
+    {
+        LCD_WriteIntAtPos(Acc_Val[1], 2, 0, 11, 0);
+        LCD_WriteStringAtPos("-", 0, 11);
+    }
+    else
+    {
+        LCD_WriteIntAtPos(Acc_Val[1], 2, 0, 11, 0);
+    }
     LCD_WriteStringAtPos(".", 0, 13);
     LCD_WriteIntAtPos(Acc_Val[1]*10, 1, 0, 14, 0);
     
-    //Ligne 2
+    
+    //Z
     LCD_WriteStringAtPos("Z:", 1, 0);
-    LCD_WriteIntAtPos(Acc_Val[2], 2, 1, 2, 0);
+    if(Acc_Val[2] < 0)
+    {
+       LCD_WriteIntAtPos(Acc_Val[2], 2, 1, 2, 0);
+       LCD_WriteStringAtPos("-", 1, 2);
+    }
+    else
+    {
+        LCD_WriteIntAtPos(Acc_Val[2], 2, 1, 2, 0); 
+    }
     LCD_WriteStringAtPos(".", 1, 4);
-    LCD_WriteIntAtPos((Acc_Val[2]*10), 1, 1, 5, 0);
+    LCD_WriteIntAtPos((Acc_Val[2]*10), 1, 1, 5, 0); 
+    
     
     LCD_WriteStringAtPos("|A|:", 1, 7);
     LCD_WriteIntAtPos(Module, 4, 1, 11, 0);
