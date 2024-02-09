@@ -37,7 +37,8 @@ void LCD_Acceleration(float *Acc_Val, float Module);
 void GestionDonnees(float Donnees[16][5], float *Minimum, float *Maximum, float *Moyenne);
 void I2C_Send(float *Minimum, float *Maximum, float *Moyenne);
 void Set_Time(int *Position, unsigned int *seconde, unsigned int Potentiometre, int Up, int Down, int Left, int Right);
-extern void pmod_s();
+void initialize_timer_interrupt(void);
+extern void Module_S();
 
 
 #define BAUD_RATE 9600
@@ -45,19 +46,7 @@ extern void pmod_s();
 #define RECEIVE_BUFFER_LEN  cchRxMax
 
 
-void initialize_timer_interrupt(void) {
-  T1CONbits.TCKPS = 3;                //    256 prescaler value
-  T1CONbits.TGATE = 0;                //    not gated input (the default)
-  T1CONbits.TCS = 0;                  //    PCBLK input (the default)
-  PR1 = (int)(((float)(TMR_TIME * PB_FRQ) / 256) + 0.5);   //set period register, generates one interrupt every 1 ms
-                                      //    48 kHz * 1 ms / 256 = 188
-  TMR1 = 0;                           //    initialize count to 0
-  IPC1bits.T1IP = 2;                  //    INT step 4: priority
-  IPC1bits.T1IS = 0;                  //    subpriority
-  IFS0bits.T1IF = 0;                  //    clear interrupt flag
-  IEC0bits.T1IE = 1;                  //    enable interrupt
-  T1CONbits.ON = 1;                   //    turn on Timer5
-}
+
 
 void main() 
 {
@@ -68,6 +57,7 @@ void main()
     ACL_Init();
     ADC_Init();
     SPIFLASH_Init();
+    UART_Init(BAUD_RATE);
     
     LCD_CLEAR();
     PMODS_InitPin(1,1,0,0,0); // initialisation du JB1 (RD9))
@@ -90,6 +80,8 @@ void main()
     int Position = 0;
     unsigned int seconde = 0 ;
     
+    
+    
     macro_enable_interrupts();
 
     // Main loop
@@ -102,6 +94,7 @@ void main()
         int BTN_D = 0;
         
         Potentiometre = ADC_AnalogRead(2);
+        Module = Module_S(Acc_Val[0], Acc_Val[1], Acc_Val[3]);
         
 //Debounce
         //Pour créee BTN_U      
@@ -250,6 +243,20 @@ void __ISR(_TIMER_1_VECTOR, IPL2AUTO) Timer1ISR(void)
    IFS0bits.T1IF = 0;     //    clear interrupt flag
 }
 
+void initialize_timer_interrupt(void) {
+  T1CONbits.TCKPS = 3;                //    256 prescaler value
+  T1CONbits.TGATE = 0;                //    not gated input (the default)
+  T1CONbits.TCS = 0;                  //    PCBLK input (the default)
+  PR1 = (int)(((float)(TMR_TIME * PB_FRQ) / 256) + 0.5);   //set period register, generates one interrupt every 1 ms
+                                      //    48 kHz * 1 ms / 256 = 188
+  TMR1 = 0;                           //    initialize count to 0
+  IPC1bits.T1IP = 2;                  //    INT step 4: priority
+  IPC1bits.T1IS = 0;                  //    subpriority
+  IFS0bits.T1IF = 0;                  //    clear interrupt flag
+  IEC0bits.T1IE = 1;                  //    enable interrupt
+  T1CONbits.ON = 1;                   //    turn on Timer5
+}
+
 void I2C_Send(float *Minimum, float *Maximum, float *Moyenne)
 {
     char strMsg[80];
@@ -265,9 +272,9 @@ void I2C_Send(float *Minimum, float *Maximum, float *Moyenne)
         UART_PutString("//");
         sprintf(strMsg, "%f", Moyenne[n]);
         UART_PutString(strMsg);
-        UART_PutString("\n\r");
+        UART_PutString("\n");
     }
-    
+    UART_PutString("\n\n\r");
       
 }
 
