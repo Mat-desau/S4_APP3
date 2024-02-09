@@ -157,12 +157,13 @@ void main()
                 if(SWT_GetValue(0) == 0)
                 {
                    LCD_seconde(seconde);
-                   LCD_WriteStringAtPos("             ", 1, 0);
+                   LCD_WriteStringAtPos("                ", 1, 0);
                 } 
                 else
                 {
-                   LCD_WriteStringAtPos("Acceleration ", 0, 0);
-                   LCD_WriteStringAtPos("             ", 1, 0);
+                   LCD_WriteStringAtPos("                ", 1, 0);
+                   LCD_WriteStringAtPos("                ", 0, 0);
+                   LCD_Acceleration(333, 444, 555, 666);
                 }
             }  
         }
@@ -171,7 +172,18 @@ void main()
 
 void LCD_Acceleration(unsigned int X, unsigned int Y, unsigned int Z, unsigned int Module) 
 {
-    LCD_WriteStringAtPos("Acceleration ", 0, 0);
+    //Ligne 1
+    LCD_WriteStringAtPos("X:", 0, 0);
+    LCD_WriteIntAtPos(X, 4, 0, 2, 0);
+    LCD_WriteStringAtPos("Y:", 0, 10);
+    LCD_WriteIntAtPos(Y, 4, 0, 12, 0);
+    
+    //Ligne 2
+    LCD_WriteStringAtPos("Z:", 1, 0);
+    LCD_WriteIntAtPos(Z, 4, 1, 2, 0);
+    LCD_WriteStringAtPos("|A|:", 1, 8);
+    LCD_WriteIntAtPos(Module, 4, 1, 12, 0);
+    
    
 }
 
