@@ -8,6 +8,8 @@
  *           Pour résoudre la problématique, il faudra lui ajoute diverses composantes liées au I2C, SPI, UART, ...
  ************************************/
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <xc.h>
 #include <sys/attribs.h>
 #include "config.h"
@@ -250,16 +252,20 @@ void __ISR(_TIMER_1_VECTOR, IPL2AUTO) Timer1ISR(void)
 
 void I2C_Send(float *Minimum, float *Maximum, float *Moyenne)
 {
+    char strMsg[80];
     int n = 0;
     
     for(n ; n < 5; n++)
     {
-       UART_PutString(Minimum[n]);
-       UART_PutString("//");
-       UART_PutString(Maximum[n]);
-       UART_PutString("//");
-       UART_PutString(Moyenne[n]);
-       UART_PutString("\n\r");
+        sprintf(strMsg, "%f", Minimum[n]);
+        UART_PutString(strMsg);
+        UART_PutString("//");
+        sprintf(strMsg, "%f", Maximum[n]);
+        UART_PutString(strMsg);
+        UART_PutString("//");
+        sprintf(strMsg, "%f", Moyenne[n]);
+        UART_PutString(strMsg);
+        UART_PutString("\n\r");
     }
     
       
