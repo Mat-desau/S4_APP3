@@ -38,7 +38,7 @@ void GestionDonnees(float Donnees[16][5], float *Minimum, float *Maximum, float 
 void I2C_Send(float *Minimum, float *Maximum, float *Moyenne);
 void Set_Time(int *Position, unsigned int *seconde, unsigned int Potentiometre, int Up, int Down, int Left, int Right);
 void initialize_timer_interrupt(void);
-extern void Module_S();
+extern float Module_S();
 
 
 #define BAUD_RATE 9600
@@ -93,8 +93,14 @@ void main()
         int BTN_R = 0;
         int BTN_D = 0;
         
+        int tempx = 2;
+        int tempy = 2;
+        int tempz = 2;
+        
+        
         Potentiometre = ADC_AnalogRead(2);
         Module = Module_S(Acc_Val[0], Acc_Val[1], Acc_Val[3]);
+        //Module = Module_S(tempx, tempy, tempz);
         
 //Debounce
         //Pour créee BTN_U      

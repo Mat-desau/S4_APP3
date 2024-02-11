@@ -9,13 +9,13 @@
       <itemPath>lcd.h</itemPath>
       <itemPath>led.h</itemPath>
       <itemPath>pmods.h</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.h</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.h</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/acl.h</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/i2c.h</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/adc.h</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/spiflash.h</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/uart.h</itemPath>
+      <itemPath>acl.h</itemPath>
+      <itemPath>adc.h</itemPath>
+      <itemPath>btn.h</itemPath>
+      <itemPath>i2c.h</itemPath>
+      <itemPath>spiflash.h</itemPath>
+      <itemPath>swt.h</itemPath>
+      <itemPath>uart.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -28,14 +28,14 @@
       <itemPath>led.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>pmods.c</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/swt.c</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/btn.c</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/acl.c</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/i2c.c</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/adc.c</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/spiflash.c</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/uart.c</itemPath>
-      <itemPath>/Users/francoisdesautels/Documents/GitHub/S4_APP3/APP.X/Module_S.s</itemPath>
+      <itemPath>acl.c</itemPath>
+      <itemPath>adc.c</itemPath>
+      <itemPath>btn.c</itemPath>
+      <itemPath>i2c.c</itemPath>
+      <itemPath>spiflash.c</itemPath>
+      <itemPath>swt.c</itemPath>
+      <itemPath>uart.c</itemPath>
+      <itemPath>Module_S.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
