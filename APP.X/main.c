@@ -84,15 +84,16 @@ void main()
     float Module = 0;
     
     int Position = 0;
-    
-    SPIFLASH_Read(0, &seconde, 4);
+   
     macro_enable_interrupts();
 
+    SPIFLASH_Read(0, &seconde, 4);
+    Save_seconde = seconde;
+    
     // Main loop
     while(1) 
     {
  //Valeurs
-        
         BTN_U = 0;
         BTN_L = 0;
         BTN_R = 0;
@@ -102,9 +103,7 @@ void main()
         int tempy = 0;
         int tempz = 0;
         
-        
         Potentiometre = ADC_AnalogRead(2);
-        //ModuleTemp = Module_S(tempx, tempy, tempz);
         ModuleTemp = Module_S(Acc_Val[0]*100, Acc_Val[1]*100, Acc_Val[2]*100);
         Module = (ModuleTemp/100.0);
         
@@ -252,10 +251,13 @@ void main()
 void __ISR(_TIMER_1_VECTOR, IPL2AUTO) Timer1ISR(void)
 {
    IFS0bits.T1IF = 0;     //    clear interrupt flag
-   ++count;
-   if(count >= 1000 && !BTN_C)
+   if(++count >= 1000)
    {
-       ++seconde;
+       if(!BTN_C)
+       {
+         ++seconde;  
+       }
+       
        Flag_1m = 1;
        count = 0;
        last_count = 0;
