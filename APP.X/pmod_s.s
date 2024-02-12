@@ -18,9 +18,11 @@
 pmod_s:			# Étiquette de la fonction
     
   
-    li $t1, 0b1111111111111111  
+    li $t0, 0b10100
+    li $t1, 0b1000000
  
-    sb $t0, LATG($0)
+    sb $t0, LATC($0)
+    sb $t1, LATG($0)
     
     
   

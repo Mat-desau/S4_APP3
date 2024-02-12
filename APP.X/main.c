@@ -47,7 +47,7 @@ void I2C_Send(float *Minimum, float *Maximum, float *Moyenne);
 void Set_Time(int *Position, unsigned int *seconde, unsigned int Potentiometre, int Up, int Down, int Left, int Right);
 void initialize_timer_interrupt(void);
 extern int Module_S(int x, int y, int z);
-extern void Pmod_S();
+extern void Pmod_S(int a, int b, int c, int d);
 void UART(float *Minimum, float *Maximum, float *Moyenne);
 
 
@@ -65,7 +65,17 @@ void main()
     ADC_Init();
     SPIFLASH_Init();
     UART_Init(BAUD_RATE);
+    
     PMODS_InitPin(0,1,0,0,0);
+    PMODS_InitPin(0,2,0,0,0);
+    PMODS_InitPin(0,3,0,0,0);
+    PMODS_InitPin(0,4,0,0,0);
+    PMODS_InitPin(0,5,0,0,0);
+    PMODS_InitPin(0,6,0,0,0);
+    PMODS_InitPin(0,7,0,0,0);
+    PMODS_InitPin(0,8,0,0,0);
+    PMODS_InitPin(0,9,0,0,0);
+    PMODS_InitPin(0,10,1,0,0);
     
     LCD_CLEAR();
     PMODS_InitPin(1,1,0,0,0); // initialisation du JB1 (RD9))
@@ -87,6 +97,8 @@ void main()
     
     int Position = 0;
     
+    int pmod_send = 0;
+    
     macro_enable_interrupts();
     
     SPIFLASH_Read(0, &seconde, 4);
@@ -100,10 +112,6 @@ void main()
         BTN_L = 0;
         BTN_R = 0;
         BTN_D = 0;
-        
-        int tempx = 0;
-        int tempy = 0;
-        int tempz = 0;
         
         Potentiometre = ADC_AnalogRead(2);
         ModuleTemp = Module_S(Acc_Val[0]*100, Acc_Val[1]*100, Acc_Val[2]*100);
@@ -174,6 +182,14 @@ void main()
         if(BTN_C == 1 && !SWT_GetValue(0))
         {
             Set_Time(&Position, &seconde, Potentiometre, BTN_U, BTN_D, BTN_L, BTN_R);
+        }
+        
+        if(pmod_send)
+        {
+            if(PMODS_GetValue(0, 10))
+            {
+                
+            }
         }
     
         if(Flag_1m)                 
