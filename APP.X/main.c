@@ -28,6 +28,14 @@
 static volatile int Flag_1m = 0;
 int Save_Position = 0;
 unsigned int Save_seconde = 0 ;
+int count = 0;
+unsigned int seconde = 0 ;
+int BTN_C = 0;
+int BTN_U = 0;
+int BTN_L = 0;
+int BTN_R = 0;
+int BTN_D = 0;
+unsigned int last_count = 0;
 
 //Fonctions
 void __ISR(_TIMER_1_VECTOR, IPL2AUTO) Timer1ISR(void);
@@ -46,9 +54,6 @@ void UART(float *Minimum, float *Maximum, float *Moyenne);
 #define TMR_TIME    0.001             // x us for each tick
 #define RECEIVE_BUFFER_LEN  cchRxMax
 
-
-
-
 void main() 
 {
     LCD_Init();
@@ -64,14 +69,12 @@ void main()
     PMODS_InitPin(1,1,0,0,0); // initialisation du JB1 (RD9))
     
     initialize_timer_interrupt();
-//Pour debounce
-    int count = 0;
+    
     int count_save = 0;
-    unsigned int last_count = 0;
+    
     unsigned int Potentiometre = 0;
     int Time_Debounce = 100;
     
-    int BTN_C = 0;
     float Acc_Val[3];
     float Valeur_Save[16][5];      //X, Y, Z, Module, Potentiomètre
     float Minimum[5];
@@ -81,7 +84,6 @@ void main()
     float Module = 0;
     
     int Position = 0;
-    unsigned int seconde = 0 ;
     
     SPIFLASH_Read(0, &seconde, 4);
     macro_enable_interrupts();
@@ -91,10 +93,10 @@ void main()
     {
  //Valeurs
         
-        int BTN_U = 0;
-        int BTN_L = 0;
-        int BTN_R = 0;
-        int BTN_D = 0;
+        BTN_U = 0;
+        BTN_L = 0;
+        BTN_R = 0;
+        BTN_D = 0;
         
         int tempx = 0;
         int tempy = 0;
@@ -176,14 +178,10 @@ void main()
         if(Flag_1m)                 
         {
             Flag_1m = 0;
-            ++count;
+           
             //Continuer a compter
-            if (count >= 1000 && !BTN_C && !SWT_GetValue(0))
+            if (!BTN_C && !SWT_GetValue(0))
             {
-                ++seconde;
-                last_count = 0;
-                //count = 0;
-                
                 Save_seconde = seconde;
                 Save_Position = Position;
                 
@@ -195,11 +193,8 @@ void main()
                 LCD_seconde(seconde);
                 LCD_Lumiere(Potentiometre);
             }
-            else if(count >= 1000 && !BTN_C && SWT_GetValue(0))
+            else if(!BTN_C && SWT_GetValue(0))
             {
-                ++seconde;
-                last_count = 0;
-                //count = 0;
                 Save_seconde = seconde;
                 Save_Position = Position;
                
@@ -210,68 +205,61 @@ void main()
                 seconde = Save_seconde;
                 Position = Save_Position;
             }
-            else if(count >= 1000 && BTN_C & !SWT_GetValue(0))
+            else if(BTN_C & !SWT_GetValue(0))
             {
                 LCD_Lumiere(Potentiometre);
-                last_count = 0;
-                //count = 0;
             }
-            if(count >= 1000)
+            //Mettre dans les valeurs
+            if(count_save == 16)
             {
-
-                
-                //Mettre dans les valeurs
-                if(count_save == 16)
-                {
-                    count_save = 0;
-                    int poop =0;
-                    SPIFLASH_Erase64k(4);
-                    SPIFLASH_Erase64k(68);
-                    SPIFLASH_Erase64k(132);
-                    SPIFLASH_Erase64k(196);
-                    SPIFLASH_Erase64k(260);
-                }
-                
-                SPIFLASH_Erase64k(0);
-               // SPIFLASH_Erase64k(4+(count_save*12));
-               // SPIFLASH_Erase64k(196+(count_save*4));
-               // SPIFLASH_Erase64k(260+(count_save*4));
-
-                SPIFLASH_ProgramPage(0, &seconde, 4);
-                SPIFLASH_ProgramPage(4, Acc_Val, 12);
-                SPIFLASH_ProgramPage(196, &Potentiometre, 4);
-                SPIFLASH_ProgramPage(260, &Module, 4);
-                
-                if(count_save < 16)
-                {
-                   Valeur_Save[count_save][0] = Acc_Val[0];
-                   Valeur_Save[count_save][1] = Acc_Val[1];
-                   Valeur_Save[count_save][2] = Acc_Val[2];
-                   Valeur_Save[count_save][3] = Module;
-                   Valeur_Save[count_save][4] = Potentiometre;
-                }
-                
-                ++count_save;
-                count = 0;
-                
-                if(count_save == 16)
-                {
-                    GestionDonnees(Valeur_Save, Minimum, Maximum, Moyenne);
-                    //I2C_Send(Minimum, Maximum, Moyenne);
-                    UART(Minimum, Maximum, Moyenne);
-                    //I2C_Send(Valeur_Save);
-                }
-                
+                count_save = 0;
+                SPIFLASH_Erase64k(4);
+                SPIFLASH_Erase64k(68);
+                SPIFLASH_Erase64k(132);
+                SPIFLASH_Erase64k(196);
+                SPIFLASH_Erase64k(260);
             }
-            
+
+            SPIFLASH_Erase64k(0);
+
+            SPIFLASH_ProgramPage(0, &seconde, 4);
+            SPIFLASH_ProgramPage(4, Acc_Val, 12);
+            SPIFLASH_ProgramPage(196, &Potentiometre, 4);
+            SPIFLASH_ProgramPage(260, &Module, 4);
+
+            if(count_save < 16)
+            {
+               Valeur_Save[count_save][0] = Acc_Val[0];
+               Valeur_Save[count_save][1] = Acc_Val[1];
+               Valeur_Save[count_save][2] = Acc_Val[2];
+               Valeur_Save[count_save][3] = Module;
+               Valeur_Save[count_save][4] = Potentiometre;
+            }
+
+            ++count_save;
+
+            if(count_save == 16)
+            {
+                GestionDonnees(Valeur_Save, Minimum, Maximum, Moyenne);
+                //I2C_Send(Minimum, Maximum, Moyenne);
+                UART(Minimum, Maximum, Moyenne);
+                //I2C_Send(Valeur_Save);
+            } 
         }
     }
 }
 
 void __ISR(_TIMER_1_VECTOR, IPL2AUTO) Timer1ISR(void)
 {
-   Flag_1m = 1;           //    Indique à la boucle principale qu'on doit traiter
    IFS0bits.T1IF = 0;     //    clear interrupt flag
+   ++count;
+   if(count >= 1000 && !BTN_C)
+   {
+       ++seconde;
+       Flag_1m = 1;
+       count = 0;
+       last_count = 0;
+   }
 }
 
 void initialize_timer_interrupt(void) {
