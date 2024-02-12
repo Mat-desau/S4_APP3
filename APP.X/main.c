@@ -38,7 +38,8 @@ void GestionDonnees(float Donnees[16][5], float *Minimum, float *Maximum, float 
 void I2C_Send(float *Minimum, float *Maximum, float *Moyenne);
 void Set_Time(int *Position, unsigned int *seconde, unsigned int Potentiometre, int Up, int Down, int Left, int Right);
 void initialize_timer_interrupt(void);
-extern float Module_S();
+extern int Module_S(int x, int y, int z);
+void UART(float *Minimum, float *Maximum, float *Moyenne);
 
 
 #define BAUD_RATE 9600
@@ -76,7 +77,9 @@ void main()
     float Minimum[5];
     float Maximum[5];
     float Moyenne[5];
+    int ModuleTemp = 0;
     float Module = 0;
+    
     int Position = 0;
     unsigned int seconde = 0 ;
     
@@ -93,14 +96,15 @@ void main()
         int BTN_R = 0;
         int BTN_D = 0;
         
-        int tempx = 2;
-        int tempy = 2;
-        int tempz = 2;
+        int tempx = 0;
+        int tempy = 0;
+        int tempz = 0;
         
         
         Potentiometre = ADC_AnalogRead(2);
-        Module = Module_S(Acc_Val[0], Acc_Val[1], Acc_Val[3]);
-        //Module = Module_S(tempx, tempy, tempz);
+        //ModuleTemp = Module_S(tempx, tempy, tempz);
+        ModuleTemp = Module_S(Acc_Val[0]*100, Acc_Val[1]*100, Acc_Val[2]*100);
+        Module = (ModuleTemp/100.0);
         
 //Debounce
         //Pour créee BTN_U      
@@ -162,6 +166,7 @@ void main()
         }
         
 //Debut Code
+        //void UART(*minimum, *maximum, *moyenne);
         //Rentrer dans le mode Set_Time
         if(BTN_C == 1 && !SWT_GetValue(0))
         {
@@ -383,9 +388,12 @@ void LCD_Acceleration(float *Acc_Val, float Module)
     LCD_WriteStringAtPos(".", 1, 4);
     LCD_WriteIntAtPos((Acc_Val[2]*10), 1, 1, 5, 0); 
     
-    
+    // Module
     LCD_WriteStringAtPos("|A|:", 1, 7);
-    LCD_WriteIntAtPos(Module, 4, 1, 11, 0);
+    LCD_WriteIntAtPos(Module, 1 , 1, 12, 0);
+    LCD_WriteStringAtPos(".", 1, 13);
+    LCD_WriteIntAtPos(Module*10, 1, 1, 14, 0);
+    LCD_WriteIntAtPos(Module*100, 1, 1, 15, 0);
 }
 
 void LCD_Lumiere(unsigned int Potentiometre)
@@ -491,3 +499,11 @@ void Set_Time(int *Position, unsigned int *seconde, unsigned int Potentiometre, 
     }
 }
 
+void UART (float *Minimum, float *Maximum, float *Moyenne)
+{
+    char UARTSEND[10];
+        
+    sprintf(UARTSEND, "Minimum : %f Maximum : %f Moyenne : %f", Minimum, Maximum, Moyenne);
+    UART_PutString(UARTSEND);
+ 
+}
