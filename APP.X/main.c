@@ -83,7 +83,7 @@ void main()
     int Position = 0;
     unsigned int seconde = 0 ;
     
-    
+    SPIFLASH_Read(0, &seconde, 4);
     
     macro_enable_interrupts();
 
@@ -91,6 +91,7 @@ void main()
     while(1) 
     {
  //Valeurs
+        
         int BTN_U = 0;
         int BTN_L = 0;
         int BTN_R = 0;
@@ -218,11 +219,24 @@ void main()
             }
             if(count >= 1000)
             {
+
+                
                 //Mettre dans les valeurs
                 if(count_save == 16)
                 {
                     count_save = 0;
                 }
+                
+                SPIFLASH_Erase4k(0+(count_save*4));
+                SPIFLASH_Erase4k(4+(count_save*12));
+                SPIFLASH_Erase4k(196+(count_save*4));
+                SPIFLASH_Erase4k(260+(count_save*4));
+
+                SPIFLASH_ProgramPage(0, &seconde, 4);
+                SPIFLASH_ProgramPage(4, Acc_Val, 12);
+                SPIFLASH_ProgramPage(196, &Potentiometre, 4);
+                SPIFLASH_ProgramPage(260, &Module, 4);
+                
                 if(count_save < 16)
                 {
                    Valeur_Save[count_save][0] = Acc_Val[0];
@@ -238,7 +252,8 @@ void main()
                 if(count_save == 16)
                 {
                     GestionDonnees(Valeur_Save, Minimum, Maximum, Moyenne);
-                    I2C_Send(Minimum, Maximum, Moyenne);
+                    //I2C_Send(Minimum, Maximum, Moyenne);
+                    UART(Minimum, Maximum, Moyenne);
                     //I2C_Send(Valeur_Save);
                 }
                 
@@ -501,9 +516,12 @@ void Set_Time(int *Position, unsigned int *seconde, unsigned int Potentiometre, 
 
 void UART (float *Minimum, float *Maximum, float *Moyenne)
 {
-    char UARTSEND[10];
-        
-    sprintf(UARTSEND, "Minimum : %f Maximum : %f Moyenne : %f", Minimum, Maximum, Moyenne);
+    char UARTSEND[80];
+    
+    sprintf(UARTSEND, "Module => Minimum : %f Maximum : %f Moyenne : %f ", Minimum[3], Maximum[3], Moyenne[3]);
     UART_PutString(UARTSEND);
- 
+    UART_PutString("\r");
+
 }
+
+
