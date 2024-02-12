@@ -39,10 +39,9 @@ Module_S:
     mult $a2, $a2
     mflo $t2
     
-    add $s0, $t2, $t3
+    add $s0, $t2, $t3 # S 
     
     # move $v0, $s0
-    
     
     clz $t4, $s0 # nb zeros au debut
 	

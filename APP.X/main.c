@@ -84,7 +84,6 @@ void main()
     unsigned int seconde = 0 ;
     
     SPIFLASH_Read(0, &seconde, 4);
-    
     macro_enable_interrupts();
 
     // Main loop
@@ -225,12 +224,18 @@ void main()
                 if(count_save == 16)
                 {
                     count_save = 0;
+                    int poop =0;
+                    SPIFLASH_Erase64k(4);
+                    SPIFLASH_Erase64k(68);
+                    SPIFLASH_Erase64k(132);
+                    SPIFLASH_Erase64k(196);
+                    SPIFLASH_Erase64k(260);
                 }
                 
-                SPIFLASH_Erase4k(0+(count_save*4));
-                SPIFLASH_Erase4k(4+(count_save*12));
-                SPIFLASH_Erase4k(196+(count_save*4));
-                SPIFLASH_Erase4k(260+(count_save*4));
+                SPIFLASH_Erase64k(0);
+               // SPIFLASH_Erase64k(4+(count_save*12));
+               // SPIFLASH_Erase64k(196+(count_save*4));
+               // SPIFLASH_Erase64k(260+(count_save*4));
 
                 SPIFLASH_ProgramPage(0, &seconde, 4);
                 SPIFLASH_ProgramPage(4, Acc_Val, 12);
