@@ -47,6 +47,7 @@ void I2C_Send(float *Minimum, float *Maximum, float *Moyenne);
 void Set_Time(int *Position, unsigned int *seconde, unsigned int Potentiometre, int Up, int Down, int Left, int Right);
 void initialize_timer_interrupt(void);
 extern int Module_S(int x, int y, int z);
+extern void Pmod_S();
 void UART(float *Minimum, float *Maximum, float *Moyenne);
 
 
@@ -64,6 +65,7 @@ void main()
     ADC_Init();
     SPIFLASH_Init();
     UART_Init(BAUD_RATE);
+    PMODS_InitPin(0,1,0,0,0);
     
     LCD_CLEAR();
     PMODS_InitPin(1,1,0,0,0); // initialisation du JB1 (RD9))
@@ -84,9 +86,9 @@ void main()
     float Module = 0;
     
     int Position = 0;
-   
+    
     macro_enable_interrupts();
-
+    
     SPIFLASH_Read(0, &seconde, 4);
     Save_seconde = seconde;
     

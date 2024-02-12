@@ -11,10 +11,18 @@
 .text
 
 .global pmod_s
-# début de la fonction
+# debut de la fonction
+    
+    
 .ent pmod_s
 pmod_s:			# Étiquette de la fonction
-    # Code à écrire
+    
+  
+    li $t1, 0b1111111111111111  
+ 
+    sb $t0, LATG($0)
+    
+    
   
     jr $ra		# Retour à la fonction
     nop			# delay slot
