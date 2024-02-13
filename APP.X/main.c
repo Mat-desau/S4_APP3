@@ -36,6 +36,7 @@ int BTN_U = 0;
 int BTN_L = 0;
 int BTN_R = 0;
 int BTN_D = 0;
+int ACK = 0;
 unsigned int last_count = 0;
 
 //Fonctions
@@ -188,116 +189,7 @@ void main()
             Set_Time(&Position, &seconde, Potentiometre, BTN_U, BTN_D, BTN_L, BTN_R);
         }
         
-        if(SWT_GetValue(2) & !BTN_C)
-        {
-            //if(PMODS_GetValue(0, 10))
-            //{
-                float Valeur_xor = 0;
-                int Valeur_xor_temp = 0;
-                int Nombre_X1 = 0;
-                int Nombre_X2 = 0;
-                int Nombre_X3 = 0;
-                int Nombre_Y1 = 0;
-                int Nombre_Y2 = 0;
-                int Nombre_Y3 = 0;
-                int Nombre_Z1 = 0;
-                int Nombre_Z2 = 0;
-                int Nombre_Z3 = 0;
-                int Nombre_Module1 = 0;
-                int Nombre_Module2 = 0;
-                int Nombre_Module3 = 0;
-                int Nombre_Lumiere1 = 0;
-                int Nombre_Lumiere2 = 0;
-                int Nombre_Lumiere3 = 0;
-                float Nombre_Total = 0;
-                
-                float Temp_Pot = (float)Potentiometre;
-                float Temp_Seconde = (float)seconde;
-                
-                pmod_s(0,1,0,1);                                    //Message Entete
-                      
-                Nombre_X1 = Longueur_Binaire(&Maximum[0], 100);
-                Nombre_X2 = Longueur_Binaire(&Minimum[0], 100);
-                Nombre_X3 = Longueur_Binaire(&Moyenne[0], 100);
-                Nombre_Y1 = Longueur_Binaire(&Maximum[1], 100);
-                Nombre_Y2 = Longueur_Binaire(&Minimum[1], 100);
-                Nombre_Y3 = Longueur_Binaire(&Moyenne[1], 100);
-                Nombre_Z1 = Longueur_Binaire(&Maximum[2], 100);
-                Nombre_Z2 = Longueur_Binaire(&Minimum[2], 100);
-                Nombre_Z3 = Longueur_Binaire(&Moyenne[2], 100);
-                Nombre_Module1 = Longueur_Binaire(&Maximum[3], 10);
-                Nombre_Module2 = Longueur_Binaire(&Minimum[3], 10);
-                Nombre_Module3 = Longueur_Binaire(&Moyenne[3], 10);
-                Nombre_Lumiere1 = Longueur_Binaire(&Maximum[4], 1);
-                Nombre_Lumiere2 = Longueur_Binaire(&Minimum[4], 1);
-                Nombre_Lumiere3 = Longueur_Binaire(&Moyenne[4], 1);
-                
-                Nombre_Total = Nombre_X1 + Nombre_X2 + Nombre_X3 + Nombre_Y1 + Nombre_Y2 + Nombre_Y3 + Nombre_Z1 + Nombre_Z2 + Nombre_Z3 + Nombre_Module1 + Nombre_Module2 + Nombre_Module3 + Nombre_Lumiere1 + Nombre_Lumiere2 + Nombre_Lumiere3;
-                
-                //Longueur
-                Valeur_xor_temp = Transfert_Binaire(&Nombre_Total, 2, 1);
-                Valeur_xor = Valeur_xor + Valeur_xor_temp;
-                
-                //Temps 
-                Valeur_xor_temp = Transfert_Binaire(&Temp_Seconde, 8, 1);
-                Valeur_xor = Valeur_xor + Valeur_xor_temp;
-                
-                //X
-                Valeur_xor_temp = Transfert_Binaire(&Maximum[0], Nombre_X1, 100);
-                Valeur_xor = Valeur_xor + Valeur_xor_temp;
-                Valeur_xor_temp = Transfert_Binaire(&Minimum[0], Nombre_X2, 100);
-                Valeur_xor = Valeur_xor + Valeur_xor_temp;
-                Valeur_xor_temp = Transfert_Binaire(&Moyenne[0], Nombre_X3, 100);
-                Valeur_xor = Valeur_xor + Valeur_xor_temp;
-                
-                //Y
-                Valeur_xor_temp = Transfert_Binaire(&Maximum[1], Nombre_Y1, 100);
-                Valeur_xor = Valeur_xor + Valeur_xor_temp;
-                Valeur_xor_temp = Transfert_Binaire(&Minimum[1], Nombre_Y2, 100);
-                Valeur_xor = Valeur_xor + Valeur_xor_temp;
-                Valeur_xor_temp = Transfert_Binaire(&Moyenne[1], Nombre_Y3, 100);
-                Valeur_xor = Valeur_xor + Valeur_xor_temp;
-                
-                //Z
-                Valeur_xor_temp = Transfert_Binaire(&Maximum[2], Nombre_Z1, 100);
-                Valeur_xor = Valeur_xor + Valeur_xor_temp;
-                Valeur_xor_temp = Transfert_Binaire(&Minimum[2], Nombre_Z2, 100);
-                Valeur_xor = Valeur_xor + Valeur_xor_temp;
-                Valeur_xor_temp = Transfert_Binaire(&Moyenne[2], Nombre_Z3, 100);
-                Valeur_xor = Valeur_xor + Valeur_xor_temp;
-                
-                //MODULE
-                Valeur_xor_temp = Transfert_Binaire(&Maximum[3], Nombre_Module1, 10);
-                Valeur_xor = Valeur_xor + Valeur_xor_temp;
-                Valeur_xor_temp = Transfert_Binaire(&Minimum[3], Nombre_Module2, 10);
-                Valeur_xor = Valeur_xor + Valeur_xor_temp;
-                Valeur_xor_temp = Transfert_Binaire(&Moyenne[3], Nombre_Module3, 10);
-                Valeur_xor = Valeur_xor + Valeur_xor_temp;
-                
-                //Lumiere
-                Valeur_xor_temp = Transfert_Binaire(&Maximum[4], Nombre_Lumiere1, 1);
-                Valeur_xor = Valeur_xor + Valeur_xor_temp;
-                Valeur_xor_temp = Transfert_Binaire(&Minimum[4], Nombre_Lumiere2, 1);
-                Valeur_xor = Valeur_xor + Valeur_xor_temp;
-                Valeur_xor_temp = Transfert_Binaire(&Moyenne[4], Nombre_Lumiere3, 1);
-                Valeur_xor = Valeur_xor + Valeur_xor_temp;
-
-                
-                //Mettre en binaire 4 bits separer
-                //longueur nombre de serie de 4 bits
-                //etiquette de temps mettre seconde en binaire
-                //min, max, moyenne
-                //Envoyer X *10
-                //Envoyer Y *10
-                //Envoyer Z *10
-                //envoyer module *100
-                //envoyer lumiere
-                //Sum Check Value (mega Xor)
-                
-                
-            
-            //}
-        }
+        
     
         if(Flag_1m)                 
         {
@@ -367,9 +259,71 @@ void main()
             if(count_save == 16)
             {
                 GestionDonnees(Valeur_Save, Minimum, Maximum, Moyenne);
-                //I2C_Send(Minimum, Maximum, Moyenne);
                 UART(Minimum, Maximum, Moyenne);
-                //I2C_Send(Valeur_Save);
+                
+                if(ACK)
+                {
+                    float Valeur_xor = 0;
+                    int Valeur_xor_temp = 0;
+                    float Nombre_Total = 0;
+
+                    float Temp_Pot = (float)Potentiometre;
+                    float Temp_Seconde = (float)seconde;
+
+                    Nombre_Total = 42;
+
+                    pmod_s(0,1,0,1); 
+
+                    //Longueur
+                    Valeur_xor_temp = Transfert_Binaire(&Nombre_Total, 2, 1);
+
+                    //Temps 
+                    Valeur_xor_temp = Transfert_Binaire(&Temp_Seconde, 8, 1);
+
+                    //X
+                    Valeur_xor_temp = Transfert_Binaire(&Maximum[0], 2, 100);
+                    Valeur_xor = Valeur_xor + Valeur_xor_temp;
+                    Valeur_xor_temp = Transfert_Binaire(&Minimum[0], 2, 100);
+                    Valeur_xor = Valeur_xor + Valeur_xor_temp;
+                    Valeur_xor_temp = Transfert_Binaire(&Moyenne[0], 2, 100);
+                    Valeur_xor = Valeur_xor + Valeur_xor_temp;
+
+                    //Y
+                    Valeur_xor_temp = Transfert_Binaire(&Maximum[1], 2, 100);
+                    Valeur_xor = Valeur_xor + Valeur_xor_temp;
+                    Valeur_xor_temp = Transfert_Binaire(&Minimum[1], 2, 100);
+                    Valeur_xor = Valeur_xor + Valeur_xor_temp;
+                    Valeur_xor_temp = Transfert_Binaire(&Moyenne[1], 2, 100);
+                    Valeur_xor = Valeur_xor + Valeur_xor_temp;
+
+                    //Z
+                    Valeur_xor_temp = Transfert_Binaire(&Maximum[2], 2, 100);
+                    Valeur_xor = Valeur_xor + Valeur_xor_temp;
+                    Valeur_xor_temp = Transfert_Binaire(&Minimum[2], 2, 100);
+                    Valeur_xor = Valeur_xor + Valeur_xor_temp;
+                    Valeur_xor_temp = Transfert_Binaire(&Moyenne[2], 2, 100);
+                    Valeur_xor = Valeur_xor + Valeur_xor_temp;
+
+                    //MODULE
+                    Valeur_xor_temp = Transfert_Binaire(&Maximum[3], 2, 10);
+                    Valeur_xor = Valeur_xor + Valeur_xor_temp;
+                    Valeur_xor_temp = Transfert_Binaire(&Minimum[3], 2, 10);
+                    Valeur_xor = Valeur_xor + Valeur_xor_temp;
+                    Valeur_xor_temp = Transfert_Binaire(&Moyenne[3], 2, 10);
+                    Valeur_xor = Valeur_xor + Valeur_xor_temp;
+
+                    //Lumiere
+                    Valeur_xor_temp = Transfert_Binaire(&Maximum[4], 3, 1);
+                    Valeur_xor = Valeur_xor + Valeur_xor_temp;
+                    Valeur_xor_temp = Transfert_Binaire(&Minimum[4], 3, 1);
+                    Valeur_xor = Valeur_xor + Valeur_xor_temp;
+                    Valeur_xor_temp = Transfert_Binaire(&Moyenne[4], 3, 1);
+                    Valeur_xor = Valeur_xor + Valeur_xor_temp;
+
+                    Valeur_xor_temp = Transfert_Binaire(&Valeur_xor, 1, 1);
+                    
+                    ACK = 0;
+                }
             } 
         }
     }
@@ -378,8 +332,11 @@ void main()
 void __ISR(_TIMER_1_VECTOR, IPL2AUTO) Timer1ISR(void)
 {
    IFS0bits.T1IF = 0;     //    clear interrupt flag
-   if(++count >= 1000)
+   count++;
+   ACK = 1;
+   if(count >= 1000)
    {
+       //ACK = 1;
        if(!BTN_C)
        {
          ++seconde; 
@@ -711,7 +668,14 @@ int Longueur_Binaire(float *Entree, int multiplication)
         d = Restant / power;
         Restant = Restant - (int)d*power;
         longueur_temp = longueur_temp - 1;
-
+        
+        if(*Entree < 0)
+        {
+            a = 0;
+            b = 0;
+            c = 0;
+            d = 0;
+        }
         pmod_s((int)a, (int)b, (int)c, (int)d);   
         Val_xor = Val_xor + (a ^ b ^ c ^ d);
     }
