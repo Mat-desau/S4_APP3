@@ -50,7 +50,7 @@ void initialize_timer_interrupt(void);
 extern int Module_S(int x, int y, int z);
 extern void pmod_s(int a, int b, int c, int d);
 void UART(float *Minimum, float *Maximum, float *Moyenne);
-void Transfert_Binaire(float *Entree, int longueur);
+void Transfert_Binaire(float *Entree, int longueur, int multiplicateur);
 int Longueur_Binaire(float *Entree, int multiplication);
 int GestionPotentiometre(unsigned int Potentiometre);
 
@@ -193,37 +193,77 @@ void main()
             //if(PMODS_GetValue(0, 10))
             //{
                 int longueur = 0;
-                int Nombre_X = 0;
-                int Nombre_Y = 0;
-                int Nombre_Z = 0;
-                int Nombre_Module = 0;
-                int Nombre_Lumiere = 0;
+                int Nombre_X1 = 0;
+                int Nombre_X2 = 0;
+                int Nombre_X3 = 0;
+                int Nombre_Y1 = 0;
+                int Nombre_Y2 = 0;
+                int Nombre_Y3 = 0;
+                int Nombre_Z1 = 0;
+                int Nombre_Z2 = 0;
+                int Nombre_Z3 = 0;
+                int Nombre_Module1 = 0;
+                int Nombre_Module2 = 0;
+                int Nombre_Module3 = 0;
+                int Nombre_Lumiere1 = 0;
+                int Nombre_Lumiere2 = 0;
+                int Nombre_Lumiere3 = 0;
                 float Nombre_Total = 0;
                 
-                //int pmod_compt = 0;
                 float Temp_Pot = (float)Potentiometre;
                 float Temp_Seconde = (float)seconde;
-                float test = 30;
                 
                 pmod_s(0,1,0,1);                                    //Message Entete
                       
-                Nombre_X = Longueur_Binaire(&Maximum[0], 100) + Longueur_Binaire(&Minimum[0], 100) + Longueur_Binaire(&Moyenne[0], 100);
-                Nombre_Y = Longueur_Binaire(&Maximum[1], 100) + Longueur_Binaire(&Minimum[1], 100) + Longueur_Binaire(&Moyenne[1], 100);
-                Nombre_Z = Longueur_Binaire(&Maximum[2], 100) + Longueur_Binaire(&Minimum[2], 100) + Longueur_Binaire(&Moyenne[2], 100);
-                Nombre_Module = Longueur_Binaire(&Maximum[3], 10) + Longueur_Binaire(&Minimum[3], 10) + Longueur_Binaire(&Moyenne[3], 10);
-                Nombre_Lumiere = Longueur_Binaire(&Maximum[4], 1) + Longueur_Binaire(&Minimum[4], 1) + Longueur_Binaire(&Moyenne[4], 1);
+                Nombre_X1 = Longueur_Binaire(&Maximum[0], 100);
+                Nombre_X2 = Longueur_Binaire(&Minimum[0], 100);
+                Nombre_X3 = Longueur_Binaire(&Moyenne[0], 100);
+                Nombre_Y1 = Longueur_Binaire(&Maximum[1], 100);
+                Nombre_Y2 = Longueur_Binaire(&Minimum[1], 100);
+                Nombre_Y3 = Longueur_Binaire(&Moyenne[1], 100);
+                Nombre_Z1 = Longueur_Binaire(&Maximum[2], 100);
+                Nombre_Z2 = Longueur_Binaire(&Minimum[2], 100);
+                Nombre_Z3 = Longueur_Binaire(&Moyenne[2], 100);
+                Nombre_Module1 = Longueur_Binaire(&Maximum[3], 10);
+                Nombre_Module2 = Longueur_Binaire(&Minimum[3], 10);
+                Nombre_Module3 = Longueur_Binaire(&Moyenne[3], 10);
+                Nombre_Lumiere1 = Longueur_Binaire(&Maximum[4], 1);
+                Nombre_Lumiere2 = Longueur_Binaire(&Minimum[4], 1);
+                Nombre_Lumiere3 = Longueur_Binaire(&Moyenne[4], 1);
                 
-                Nombre_Total = Nombre_X + Nombre_Y + Nombre_Z + Nombre_Module + Nombre_Lumiere;
+                Nombre_Total = Nombre_X1 + Nombre_X2 + Nombre_X3 + Nombre_Y1 + Nombre_Y2 + Nombre_Y3 + Nombre_Z1 + Nombre_Z2 + Nombre_Z3 + Nombre_Module1 + Nombre_Module2 + Nombre_Module3 + Nombre_Lumiere1 + Nombre_Lumiere2 + Nombre_Lumiere3;
                 
-                Transfert_Binaire(&Nombre_Total, 2);
-                //Nombre_Lumiere = GestionPotentiometre(Potentiometre);
+                //Longueur
+                Transfert_Binaire(&Nombre_Total, 2, 1);
                 
-                longueur = Longueur_Binaire(&test, 1);
-                Transfert_Binaire(&test, longueur);
-                //decimalToBinary((int)test, Tableau); 
-                //Transfert_Binaire(&test, longueur, Tableau);       //X
+                //Temps
+                Transfert_Binaire(&Temp_Seconde, 8, 1);
                 
-                //pmod_compt = longueur*4;
+                //X
+                Transfert_Binaire(&Maximum[0], Nombre_X1, 100);
+                Transfert_Binaire(&Minimum[0], Nombre_X2, 100);
+                Transfert_Binaire(&Moyenne[0], Nombre_X3, 100);
+                
+                //Y
+                Transfert_Binaire(&Maximum[1], Nombre_Y1, 100);
+                Transfert_Binaire(&Minimum[1], Nombre_Y2, 100);
+                Transfert_Binaire(&Moyenne[1], Nombre_Y3, 100);
+                
+                //Z
+                Transfert_Binaire(&Maximum[2], Nombre_Z1, 100);
+                Transfert_Binaire(&Minimum[2], Nombre_Z2, 100);
+                Transfert_Binaire(&Moyenne[2], Nombre_Z3, 100);
+                
+                //MODULE
+                Transfert_Binaire(&Maximum[3], Nombre_Module1, 10);
+                Transfert_Binaire(&Minimum[3], Nombre_Module2, 10);
+                Transfert_Binaire(&Moyenne[3], Nombre_Module3, 10);
+                
+                //Lumiere
+                Transfert_Binaire(&Maximum[4], Nombre_Lumiere1, 1);
+                Transfert_Binaire(&Minimum[4], Nombre_Lumiere2, 1);
+                Transfert_Binaire(&Moyenne[4], Nombre_Lumiere3, 1);
+                
                 
                 
                 
@@ -617,7 +657,7 @@ int Longueur_Binaire(float *Entree, int multiplication)
     return reponse;
 }
 
- void Transfert_Binaire(float *Entree, int longueur)
+ void Transfert_Binaire(float *Entree, int longueur, int multiplicateur)
 {
     int longueur_temp = (longueur * 4) - 1;
     int Restant = (int)*Entree;
