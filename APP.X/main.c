@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <xc.h>
 #include <sys/attribs.h>
 #include "config.h"
@@ -47,8 +48,12 @@ void I2C_Send(float *Minimum, float *Maximum, float *Moyenne);
 void Set_Time(int *Position, unsigned int *seconde, unsigned int Potentiometre, int Up, int Down, int Left, int Right);
 void initialize_timer_interrupt(void);
 extern int Module_S(int x, int y, int z);
-extern void Pmod_S(int a, int b, int c, int d);
+extern void pmod_s(int a, int b, int c, int d);
 void UART(float *Minimum, float *Maximum, float *Moyenne);
+void Transfert_Binaire(float *Entree, int longueur, int *Sortie);
+int Longueur_Binaire(float *Entree);
+void decimalToBinary(int num, int *Sortie);
+int GestionPotentiometre(unsigned int Potentiometre);
 
 
 #define BAUD_RATE 9600
@@ -101,7 +106,7 @@ void main()
     
     macro_enable_interrupts();
     
-    SPIFLASH_Read(0, &seconde, 4);
+    //SPIFLASH_Read(0, &seconde, 4);
     Save_seconde = seconde;
     
     // Main loop
@@ -184,12 +189,56 @@ void main()
             Set_Time(&Position, &seconde, Potentiometre, BTN_U, BTN_D, BTN_L, BTN_R);
         }
         
-        if(pmod_send)
+        if(SWT_GetValue(2))
         {
-            if(PMODS_GetValue(0, 10))
-            {
+            //if(PMODS_GetValue(0, 10))
+            //{
+                //int Nombre = 0;
+                //int dontcare = 0;
+                //int longueur = 0;
+                int Nombre_X = 0;
+                int Nombre_Y = 0;
+                int Nombre_Z = 0;
+                int Nombre_Module = 0;
+                int Nombre_Lumiere = 0;
+                int pmod_compt = 0;
+                //float test = 4;
                 
-            }
+                pmod_s(0,1,0,1);                                    //Message Entete
+                
+                Nombre_Lumiere = GestionPotentiometre(Potentiometre);
+                
+                //longueur = Longueur_Binaire(&Acc_Val[0]);
+                //longueur = Longueur_Binaire(&test);
+                //int Tableau[longueur*4];
+                //Transfert_Binaire(&test, longueur*4, Tableau);
+                //decimalToBinary((int)test, Tableau); 
+                //Transfert_Binaire(&test, longueur*4, Tableau);       //X
+                
+                //pmod_compt = longueur*4;
+                
+                //for(dontcare; pmod_compt > 0; dontcare++)
+                //{
+                    //pmod_s(Tableau[pmod_compt], Tableau[pmod_compt-1], Tableau[pmod_compt-2], Tableau[pmod_compt-3]);
+                    //pmod_compt = (pmod_compt-4);
+                //}
+                
+                //Nombre_X = longueur;
+                
+                
+                //Mettre en binaire 4 bits separer
+                //longueur nombre de serie de 4 bits
+                //etiquette de temps mettre seconde en binaire
+                //Envoyer X *10
+                //Envoyer Y *10
+                //Envoyer Z *10
+                //envoyer module *100
+                //envoyer lumiere
+                //Sum Check Value (mega Xor)
+                
+                
+            
+            //}
         }
     
         if(Flag_1m)                 
@@ -239,10 +288,10 @@ void main()
 
             SPIFLASH_Erase64k(0);
 
-            SPIFLASH_ProgramPage(0, &seconde, 4);
-            SPIFLASH_ProgramPage(4, Acc_Val, 12);
-            SPIFLASH_ProgramPage(196, &Potentiometre, 4);
-            SPIFLASH_ProgramPage(260, &Module, 4);
+            //SPIFLASH_ProgramPage(0, &seconde, 4);
+            //SPIFLASH_ProgramPage(4, Acc_Val, 12);
+            //SPIFLASH_ProgramPage(196, &Potentiometre, 4);
+            //SPIFLASH_ProgramPage(260, &Module, 4);
 
             if(count_save < 16)
             {
@@ -537,4 +586,204 @@ void UART (float *Minimum, float *Maximum, float *Moyenne)
 
 }
 
+int Longueur_Binaire(float *Entree)
+{
+    float nb = 0;
+    int reponse = 0;
+    float Valeur = 0;
+    float i = 0;
+   
+    
+    for(i; Valeur < *Entree; i++)
+    {
+        Valeur = Valeur + pow(2, i);
+    }
+    if(i == 0)
+    {
+        return 1;
+    }
+    
+    nb = i/4;
+    
+    reponse = ceil(nb);
+    
+    return reponse;
+}
 
+ void Transfert_Binaire(float *Entree, int longueur, int *Sortie)
+{
+    int i = 0;
+    int x = 0;
+     
+    char Temporaire[longueur];
+    
+    itoa(Temporaire, (int)*Entree, 2);
+    
+    for(x; x < sizeof(Temporaire); x++)
+    {
+        switch (Temporaire[x])
+        {
+            case '0':
+                Sortie[x] = 0;
+                break;
+            case '1':
+                Sortie[x] = 1;
+                break;
+            default :
+                Sortie[x] = 0;
+                break;
+        }          
+    }
+}
+ 
+void decimalToBinary(int num, int *Sortie) 
+{  
+    if (num == 0) {
+      printf("0");
+      return;
+    }
+   
+   // Stores binary representation of number.
+   int binaryNum[32]; // Assuming 32 bit integer.
+   
+   int i=0;
+   
+   while (num > 0) 
+   {
+      binaryNum[i++] = num % 2;
+      num /= 2;
+   }
+   int x = 0;
+   int j = 0;
+   // Printing array in reverse order.
+   for (j = i-1; j >= 0; j--)
+   {
+       Sortie[x] = binaryNum[j];
+       x++;
+   }
+    //printf("%d", binaryNum[j]);
+}
+
+int GestionPotentiometre(unsigned int Pot)
+{
+    int longueur = 0;
+    int i = 0;
+    int Restant = Pot;
+    int a = 0;
+    int b = 0;
+    int c = 0;
+    int d = 0;
+    
+    if(Pot >= 256)
+    {
+        longueur = 3;
+    }
+    else if(Pot >= 16)
+    {
+        longueur = 2;
+    }
+    else
+    {
+        longueur = 1;
+    }
+    
+    if(longueur == 1)
+    {
+    //Dernier pack
+        a = Restant / 16;
+        Restant = Restant - (int)a*16;
+
+        b = Restant / 8;
+        Restant = Restant - (int)b*8;
+
+        c = Restant / 4;
+        Restant = Restant - (int)c*4;
+
+        d = Restant / 2;
+        Restant = Restant - (int)d*2;
+
+        pmod_s((int)a, (int)b, (int)c, (int)d);     
+    }
+    if(longueur == 2)
+    {
+            
+    //Deuxieme pack
+        a = Restant / 256;
+        Restant = Restant - (int)a*256;
+
+        b = Restant / 128;
+        Restant = Restant - (int)b*128;
+
+        c = Restant / 64;
+        Restant = Restant - (int)c*64;
+
+        d = Restant / 32;
+        Restant = Restant - (int)d*32;
+
+        pmod_s((int)a, (int)b, (int)c, (int)d); 
+
+    //Dernier pack
+        a = Restant / 16;
+        Restant = Restant - (int)a*16;
+
+        b = Restant / 8;
+        Restant = Restant - (int)b*8;
+
+        c = Restant / 4;
+        Restant = Restant - (int)c*4;
+
+        d = Restant / 2;
+        Restant = Restant - (int)d*2;
+
+        pmod_s((int)a, (int)b, (int)c, (int)d); 
+    }
+    if(longueur == 3)
+    {
+    //Premier pack
+        a = Restant / 4096;
+        Restant = Restant - (int)a*4096;
+
+        b = Restant / 2048;
+        Restant = Restant - (int)b*2048;
+
+        c = Restant / 1024;
+        Restant = Restant - (int)c*1024;
+
+        d = Restant / 512;
+        Restant = Restant - (int)d*512;
+
+        pmod_s((int)a, (int)b, (int)c, (int)d); 
+
+    //Deuxieme pack
+        a = Restant / 256;
+        Restant = Restant - (int)a*256;
+
+        b = Restant / 128;
+        Restant = Restant - (int)b*128;
+
+        c = Restant / 64;
+        Restant = Restant - (int)c*64;
+
+        d = Restant / 32;
+        Restant = Restant - (int)d*32;
+
+        pmod_s((int)a, (int)b, (int)c, (int)d); 
+
+    //Dernier pack
+        a = Restant / 16;
+        Restant = Restant - (int)a*16;
+
+        b = Restant / 8;
+        Restant = Restant - (int)b*8;
+
+        c = Restant / 4;
+        Restant = Restant - (int)c*4;
+
+        d = Restant / 2;
+        Restant = Restant - (int)d*2;
+
+        pmod_s((int)a, (int)b, (int)c, (int)d); 
+    }
+    
+    return longueur;
+}
