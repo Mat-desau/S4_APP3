@@ -106,7 +106,7 @@ void main()
     
     macro_enable_interrupts();
     
-    //SPIFLASH_Read(0, &seconde, 4);
+    SPIFLASH_Read(0, &seconde, 4);
     Save_seconde = seconde;
     
     // Main loop
@@ -204,7 +204,7 @@ void main()
                 int pmod_compt = 0;
                 //float test = 4;
                 
-                pmod_s(0,1,0,1);                                    //Message Entete
+                //pmod_s(0,1,0,1);                                    //Message Entete
                 
                 Nombre_Lumiere = GestionPotentiometre(Potentiometre);
                 
@@ -288,10 +288,10 @@ void main()
 
             SPIFLASH_Erase64k(0);
 
-            //SPIFLASH_ProgramPage(0, &seconde, 4);
-            //SPIFLASH_ProgramPage(4, Acc_Val, 12);
-            //SPIFLASH_ProgramPage(196, &Potentiometre, 4);
-            //SPIFLASH_ProgramPage(260, &Module, 4);
+            SPIFLASH_ProgramPage(0, &seconde, 4);
+            SPIFLASH_ProgramPage(4, Acc_Val, 12);
+            SPIFLASH_ProgramPage(196, &Potentiometre, 4);
+            SPIFLASH_ProgramPage(260, &Module, 4);
 
             if(count_save < 16)
             {

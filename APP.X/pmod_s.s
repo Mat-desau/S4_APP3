@@ -16,11 +16,6 @@
     
 .ent pmod_s
 pmod_s:			# Étiquette de la fonction
-    
-    li $t0, 0
-    li $t1, 0
-    li $t2, 0
-    li $t3, 0
     li $s0, 0 # 0
     li $s1, 0b00000001 # LATC1  Pin 2
     li $s2, 0b00000010 # LATC2  Pin 1
@@ -28,36 +23,30 @@ pmod_s:			# Étiquette de la fonction
     li $s4, 0b00001000 # LATC4  Pin 3
     li $s5, 0b00000000 # EMPTY
     
+    bgt $a0, $s0, A0
     
+    add $s5, $s5, $s1
     
     A0:
-    
-	add $s5, $s5, $s1
+	bgt $a1, $s0, A1
+	nop
 	
-    move $t0, $a0
-    bgt $t0, $s0, A0	
-    
+    add $s5, $s5, $s2	
     
     A1:
-    
-	add $s5, $s5, $s2
+	bgt $a2, $s0, A2
+	nop
 	
-    move $t1, $a1
-    bgt $t0, $s0, A1
+   add $s5, $s5, $s3
      
     A2:
-    
-	add $s5, $s5, $s3
-	
-    move $t2, $a2
-    bgt $t0, $s0, A2
+	bgt $a3, $s0, A3
+	nop
+	 
+    add $s5, $s5, $s4
      
     A3:
-    
-	add $s5, $s5, $s4
-    
-    move $t3, $a3
-    bgt $t0, $s0, A3
+	nop
  
     sb $s5, LATC($0)
 
