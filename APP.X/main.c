@@ -51,7 +51,7 @@ extern int Module_S(int x, int y, int z);
 extern void pmod_s(int a, int b, int c, int d);
 void UART(float *Minimum, float *Maximum, float *Moyenne);
 void Transfert_Binaire(float *Entree, int longueur);
-int Longueur_Binaire(float *Entree);
+int Longueur_Binaire(float *Entree, int multiplication);
 int GestionPotentiometre(unsigned int Potentiometre);
 
 
@@ -207,18 +207,18 @@ void main()
                 
                 pmod_s(0,1,0,1);                                    //Message Entete
                       
-                Nombre_X = Longueur_Binaire(&Acc_Val[0]);
-                Nombre_Y = Longueur_Binaire(&Acc_Val[1]);
-                Nombre_Z = Longueur_Binaire(&Acc_Val[2]);
-                Nombre_Module = Longueur_Binaire(&Module);
-                Nombre_Lumiere = Longueur_Binaire(&Temp_Pot);
+                Nombre_X = Longueur_Binaire(&Maximum[0], 100) + Longueur_Binaire(&Minimum[0], 100) + Longueur_Binaire(&Moyenne[0], 100);
+                Nombre_Y = Longueur_Binaire(&Maximum[1], 100) + Longueur_Binaire(&Minimum[1], 100) + Longueur_Binaire(&Moyenne[1], 100);
+                Nombre_Z = Longueur_Binaire(&Maximum[2], 100) + Longueur_Binaire(&Minimum[2], 100) + Longueur_Binaire(&Moyenne[2], 100);
+                Nombre_Module = Longueur_Binaire(&Maximum[3], 10) + Longueur_Binaire(&Minimum[3], 10) + Longueur_Binaire(&Moyenne[3], 10);
+                Nombre_Lumiere = Longueur_Binaire(&Maximum[4], 1) + Longueur_Binaire(&Minimum[4], 1) + Longueur_Binaire(&Moyenne[4], 1);
                 
                 Nombre_Total = Nombre_X + Nombre_Y + Nombre_Z + Nombre_Module + Nombre_Lumiere;
                 
                 Transfert_Binaire(&Nombre_Total, 2);
                 //Nombre_Lumiere = GestionPotentiometre(Potentiometre);
                 
-                longueur = Longueur_Binaire(&test);
+                longueur = Longueur_Binaire(&test, 1);
                 Transfert_Binaire(&test, longueur);
                 //decimalToBinary((int)test, Tableau); 
                 //Transfert_Binaire(&test, longueur, Tableau);       //X
@@ -590,15 +590,18 @@ void UART (float *Minimum, float *Maximum, float *Moyenne)
 
 }
 
-int Longueur_Binaire(float *Entree)
+int Longueur_Binaire(float *Entree, int multiplication)
 {
     float nb = 0;
     int reponse = 0;
     float Valeur = 0;
     float i = 0;
+    
+    float Valeur_Entree = (*Entree);
+    Valeur_Entree = Valeur_Entree * multiplication;
    
     
-    for(i; Valeur < *Entree; i++)
+    for(i; Valeur < Valeur_Entree; i++)
     {
         Valeur = Valeur + pow(2, i);
     }
