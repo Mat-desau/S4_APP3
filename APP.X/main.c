@@ -50,9 +50,8 @@ void initialize_timer_interrupt(void);
 extern int Module_S(int x, int y, int z);
 extern void pmod_s(int a, int b, int c, int d);
 void UART(float *Minimum, float *Maximum, float *Moyenne);
-void Transfert_Binaire(float *Entree, int longueur, int *Sortie);
+void Transfert_Binaire(float *Entree, int longueur);
 int Longueur_Binaire(float *Entree);
-void decimalToBinary(int num, int *Sortie);
 int GestionPotentiometre(unsigned int Potentiometre);
 
 
@@ -184,51 +183,54 @@ void main()
 //Debut Code
         //void UART(*minimum, *maximum, *moyenne);
         //Rentrer dans le mode Set_Time
-        if(BTN_C == 1 && !SWT_GetValue(0))
+        if(BTN_C && !SWT_GetValue(0))
         {
             Set_Time(&Position, &seconde, Potentiometre, BTN_U, BTN_D, BTN_L, BTN_R);
         }
         
-        if(SWT_GetValue(2))
+        if(SWT_GetValue(2) & !BTN_C)
         {
             //if(PMODS_GetValue(0, 10))
             //{
-                //int Nombre = 0;
-                //int dontcare = 0;
-                //int longueur = 0;
+                int longueur = 0;
                 int Nombre_X = 0;
                 int Nombre_Y = 0;
                 int Nombre_Z = 0;
                 int Nombre_Module = 0;
                 int Nombre_Lumiere = 0;
-                int pmod_compt = 0;
-                //float test = 4;
+                float Nombre_Total = 0;
                 
-                //pmod_s(0,1,0,1);                                    //Message Entete
+                //int pmod_compt = 0;
+                float Temp_Pot = (float)Potentiometre;
+                float Temp_Seconde = (float)seconde;
+                float test = 30;
                 
-                Nombre_Lumiere = GestionPotentiometre(Potentiometre);
+                pmod_s(0,1,0,1);                                    //Message Entete
+                      
+                Nombre_X = Longueur_Binaire(&Acc_Val[0]);
+                Nombre_Y = Longueur_Binaire(&Acc_Val[1]);
+                Nombre_Z = Longueur_Binaire(&Acc_Val[2]);
+                Nombre_Module = Longueur_Binaire(&Module);
+                Nombre_Lumiere = Longueur_Binaire(&Temp_Pot);
                 
-                //longueur = Longueur_Binaire(&Acc_Val[0]);
-                //longueur = Longueur_Binaire(&test);
-                //int Tableau[longueur*4];
-                //Transfert_Binaire(&test, longueur*4, Tableau);
+                Nombre_Total = Nombre_X + Nombre_Y + Nombre_Z + Nombre_Module + Nombre_Lumiere;
+                
+                Transfert_Binaire(&Nombre_Total, 2);
+                //Nombre_Lumiere = GestionPotentiometre(Potentiometre);
+                
+                longueur = Longueur_Binaire(&test);
+                Transfert_Binaire(&test, longueur);
                 //decimalToBinary((int)test, Tableau); 
-                //Transfert_Binaire(&test, longueur*4, Tableau);       //X
+                //Transfert_Binaire(&test, longueur, Tableau);       //X
                 
                 //pmod_compt = longueur*4;
                 
-                //for(dontcare; pmod_compt > 0; dontcare++)
-                //{
-                    //pmod_s(Tableau[pmod_compt], Tableau[pmod_compt-1], Tableau[pmod_compt-2], Tableau[pmod_compt-3]);
-                    //pmod_compt = (pmod_compt-4);
-                //}
-                
-                //Nombre_X = longueur;
                 
                 
                 //Mettre en binaire 4 bits separer
                 //longueur nombre de serie de 4 bits
                 //etiquette de temps mettre seconde en binaire
+                //min, max, moyenne
                 //Envoyer X *10
                 //Envoyer Y *10
                 //Envoyer Z *10
@@ -271,9 +273,10 @@ void main()
                 seconde = Save_seconde;
                 Position = Save_Position;
             }
-            else if(BTN_C & !SWT_GetValue(0))
+            else if(BTN_C && !SWT_GetValue)
             {
-                LCD_Lumiere(Potentiometre);
+                            
+
             }
             //Mettre dans les valeurs
             if(count_save == 16)
@@ -285,6 +288,7 @@ void main()
                 SPIFLASH_Erase64k(196);
                 SPIFLASH_Erase64k(260);
             }
+            
 
             SPIFLASH_Erase64k(0);
 
@@ -322,10 +326,10 @@ void __ISR(_TIMER_1_VECTOR, IPL2AUTO) Timer1ISR(void)
    {
        if(!BTN_C)
        {
-         ++seconde;  
+         ++seconde; 
+         Flag_1m = 1;
        }
        
-       Flag_1m = 1;
        count = 0;
        last_count = 0;
    }
@@ -610,58 +614,47 @@ int Longueur_Binaire(float *Entree)
     return reponse;
 }
 
- void Transfert_Binaire(float *Entree, int longueur, int *Sortie)
+ void Transfert_Binaire(float *Entree, int longueur)
 {
-    int i = 0;
-    int x = 0;
-     
-    char Temporaire[longueur];
+    int longueur_temp = (longueur * 4) - 1;
+    int Restant = (int)*Entree;
+    int dontcare = 0;
+    int power = 0;
+    int a = 0;
+    int b = 0;
+    int c = 0;
+    int d = 0;
     
-    itoa(Temporaire, (int)*Entree, 2);
-    
-    for(x; x < sizeof(Temporaire); x++)
+    for(dontcare; Restant > 0; dontcare++)
     {
-        switch (Temporaire[x])
-        {
-            case '0':
-                Sortie[x] = 0;
-                break;
-            case '1':
-                Sortie[x] = 1;
-                break;
-            default :
-                Sortie[x] = 0;
-                break;
-        }          
+        a = 0;
+        b = 0;
+        c = 0;
+        d = 0;
+        
+        power = pow(2, longueur_temp);
+        a = Restant / power;
+        Restant = Restant - (int)a*power;
+        longueur_temp = longueur_temp - 1;
+
+        power = pow(2, longueur_temp);
+        b = Restant / power;
+        Restant = Restant - (int)b*power;
+        longueur_temp = longueur_temp - 1;
+
+        power = pow(2, longueur_temp);
+        c = Restant / power;
+        Restant = Restant - (int)c*power;
+        longueur_temp = longueur_temp - 1;
+
+        power = pow(2, longueur_temp);
+        d = Restant / power;
+        Restant = Restant - (int)d*power;
+        longueur_temp = longueur_temp - 1;
+
+        pmod_s((int)a, (int)b, (int)c, (int)d);   
+        
     }
-}
- 
-void decimalToBinary(int num, int *Sortie) 
-{  
-    if (num == 0) {
-      printf("0");
-      return;
-    }
-   
-   // Stores binary representation of number.
-   int binaryNum[32]; // Assuming 32 bit integer.
-   
-   int i=0;
-   
-   while (num > 0) 
-   {
-      binaryNum[i++] = num % 2;
-      num /= 2;
-   }
-   int x = 0;
-   int j = 0;
-   // Printing array in reverse order.
-   for (j = i-1; j >= 0; j--)
-   {
-       Sortie[x] = binaryNum[j];
-       x++;
-   }
-    //printf("%d", binaryNum[j]);
 }
 
 int GestionPotentiometre(unsigned int Pot)
@@ -690,6 +683,11 @@ int GestionPotentiometre(unsigned int Pot)
     if(longueur == 1)
     {
     //Dernier pack
+        a = 0;
+        b = 0;
+        c = 0;
+        d = 0;
+        
         a = Restant / 16;
         Restant = Restant - (int)a*16;
 
@@ -708,6 +706,11 @@ int GestionPotentiometre(unsigned int Pot)
     {
             
     //Deuxieme pack
+        a = 0;
+        b = 0;
+        c = 0;
+        d = 0;
+        
         a = Restant / 256;
         Restant = Restant - (int)a*256;
 
@@ -723,6 +726,11 @@ int GestionPotentiometre(unsigned int Pot)
         pmod_s((int)a, (int)b, (int)c, (int)d); 
 
     //Dernier pack
+        a = 0;
+        b = 0;
+        c = 0;
+        d = 0;
+        
         a = Restant / 16;
         Restant = Restant - (int)a*16;
 
@@ -740,47 +748,62 @@ int GestionPotentiometre(unsigned int Pot)
     if(longueur == 3)
     {
     //Premier pack
-        a = Restant / 4096;
-        Restant = Restant - (int)a*4096;
+        a = 0;
+        b = 0;
+        c = 0;
+        d = 0;
+              
+        a = Restant / 2048;
+        Restant = Restant - (int)a*2048;
 
-        b = Restant / 2048;
-        Restant = Restant - (int)b*2048;
+        b = Restant / 1024;
+        Restant = Restant - (int)b*1024;
 
-        c = Restant / 1024;
-        Restant = Restant - (int)c*1024;
+        c = Restant / 512;
+        Restant = Restant - (int)c*512;
 
-        d = Restant / 512;
-        Restant = Restant - (int)d*512;
+        d = Restant / 256;
+        Restant = Restant - (int)d*256;
 
         pmod_s((int)a, (int)b, (int)c, (int)d); 
 
     //Deuxieme pack
-        a = Restant / 256;
-        Restant = Restant - (int)a*256;
+        a = 0;
+        b = 0;
+        c = 0;
+        d = 0;
+        
+        a = Restant / 128;
+        Restant = Restant - (int)a*128;
 
-        b = Restant / 128;
-        Restant = Restant - (int)b*128;
+        b = Restant / 64;
+        Restant = Restant - (int)b*64;
 
-        c = Restant / 64;
-        Restant = Restant - (int)c*64;
+        c = Restant / 32;
+        Restant = Restant - (int)c*32;
 
-        d = Restant / 32;
-        Restant = Restant - (int)d*32;
+        d = Restant / 16;
+        Restant = Restant - (int)d*16;
 
         pmod_s((int)a, (int)b, (int)c, (int)d); 
 
     //Dernier pack
-        a = Restant / 16;
-        Restant = Restant - (int)a*16;
+        a = 0;
+        b = 0;
+        c = 0;
+        d = 0;
+        
+        a = Restant / 8;
+        Restant = Restant - (int)a*8;
 
-        b = Restant / 8;
-        Restant = Restant - (int)b*8;
+        b = Restant / 4;
+        Restant = Restant - (int)b*4;
 
-        c = Restant / 4;
-        Restant = Restant - (int)c*4;
+        c = Restant / 2;
+        Restant = Restant - (int)c*2;
 
-        d = Restant / 2;
-        Restant = Restant - (int)d*2;
+        d = Restant / 1;
+        Restant = Restant - (int)d*1;
 
         pmod_s((int)a, (int)b, (int)c, (int)d); 
     }
