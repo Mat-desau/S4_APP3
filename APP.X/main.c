@@ -259,6 +259,7 @@ void main()
             if(count_save == 16)
             {
                 GestionDonnees(Valeur_Save, Minimum, Maximum, Moyenne);
+                
                 UART(Minimum, Maximum, Moyenne);
                 
                 if(ACK)
@@ -266,6 +267,9 @@ void main()
                     float Valeur_xor = 0;
                     int Valeur_xor_temp = 0;
                     float Nombre_Total = 0;
+                    int ACK_for = 0;
+                    int compteur = 0;
+                    int Tableau[208];
 
                     float Temp_Pot = (float)Potentiometre;
                     float Temp_Seconde = (float)seconde;
@@ -321,7 +325,7 @@ void main()
                     Valeur_xor = Valeur_xor + Valeur_xor_temp;
 
                     Valeur_xor_temp = Transfert_Binaire(&Valeur_xor, 1, 1);
-                    
+
                     ACK = 0;
                 }
             } 
@@ -676,6 +680,8 @@ int Longueur_Binaire(float *Entree, int multiplication)
             c = 0;
             d = 0;
         }
+        
+        
         pmod_s((int)a, (int)b, (int)c, (int)d);   
         Val_xor = Val_xor + (a ^ b ^ c ^ d);
     }
